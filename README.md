@@ -8,13 +8,17 @@
 
 #### Phase 1: Resting (1 min)
 
-- [x] Test
-- [ ] Test
-- [x] Test
+- Each hero levels up.
+- Depending on how well players defended in the **War-Phase**, they recieve **Training points**.
+- **Training points** are required for upgrading your **Troops**.
+- Depending on how well players attacked in the last **War Phase**, they recieve **Gold**.
+- **Gold** is required to buy equipment for the Heroes.
+- Merchants are enabled only during the **Resting Phase**.
+
 
 #### Phase 2: Planning (1 min)
 
-- At the beginning of the planning step, each player recieves **Recruiting Points** wich increase with the level of the hero.
+- At the beginning of the planning phase, each player recieves **Recruiting Points** wich increase with the level of the hero.
 - **Recruiting Points** can be used to recruit units for the next **War Phase**.
 - Whenever you recruit a unit, you can decide in wich lane the unit spawns and if they spawn with a delay of 30, 60 or 90 seconds.
 - A player can spend half his **Recruiting Points** to start an invasion in the next **War Phase**.
