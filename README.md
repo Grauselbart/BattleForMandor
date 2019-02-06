@@ -4,7 +4,15 @@
 
 ### Overview
 
+Overwhelm the enemy heroes and defenses with *troops* and kill the enemy king to win the game.
+
+- There are three warfronts, each of them with its own **gate** to the king.
+- Those **gates** share their hit points.
+- Heroes have to protect the gates and kill all the enemy *troops* and **invaders**.
+
 ### Phase-System
+
+The actual gameplay is splitted in three phases. Each of them has its own timer counting down until the next phase begins. The **Resting Phase** and **Planning Phase** can be skipped with a ready check function.
 
 #### Phase 1: Resting (1 min)
 
