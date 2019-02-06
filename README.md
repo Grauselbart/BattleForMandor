@@ -15,7 +15,6 @@
 - **Gold** is required to buy equipment for the Heroes.
 - Merchants are enabled only during the **Resting Phase**.
 
-
 #### Phase 2: Planning (1 min)
 
 - At the beginning of the planning phase, each player recieves **Recruiting Points** wich increase with the level of the hero.
