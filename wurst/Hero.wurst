@@ -2,10 +2,19 @@ package Hero
 
 class PlayerHero
 	unit hero
+	ability P
 	ability Q
 	ability W
 	ability E
 	ability R
+
+	construct(unit h, ability q, ability w, ability e, ability r, ability p)
+		this.hero=h
+		this.P=p
+		this.Q=q
+		this.W=w
+		this.E=e
+		this.R=r
 
 	// reduces the cooldown of a given ability based on a flat amount
 	function reduceCooldown(ability a, real amount)
