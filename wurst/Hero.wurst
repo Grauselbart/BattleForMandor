@@ -1,12 +1,20 @@
 package Hero
 
 class PlayerHero
+	// Unit
 	unit hero
+
+	// Abilities
 	ability P
 	ability Q
 	ability W
 	ability E
 	ability R
+
+	// Stats
+
+
+	// ------------------------ //
 
 	construct(unit h, ability q, ability w, ability e, ability r, ability p)
 		this.hero=h
