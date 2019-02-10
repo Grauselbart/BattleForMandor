@@ -43,7 +43,7 @@ class PlayerHero
 		return this.hero
 	
 	// Reduces the cooldown of each ability based on a flat amount
-	function reduceGlobalCooldown(real amount)
+	function reduceGlobalCooldownFlatRemaining(real amount)
 		Q.reduceCooldown(amount)
 		W.reduceCooldown(amount)
 		E.reduceCooldown(amount)
@@ -74,16 +74,17 @@ class PlayerHero
 
 	
 class HeroAbility
-	ability abil
-	int ABIL_ID
-	PlayerHero hero		
-	real cooldown
-	int manacost
-	real damage
-	real duration
-	real range
-	string tooltip
-	string tooltipAdvanced
+	ability abil			// actual ability
+	int ABIL_ID				// ability ID
+	PlayerHero hero			// hero that has this ability
+	real cooldown			// maximum cooldown
+	int manacost			// maximum mana cost
+	real damage				// damage amount
+	real duration			// optional duration for buffs, debuffs etc.
+	real range				// optional range for smart cast stuff
+	string tooltip			// name tooltip, e.g.: Fireball [Q]
+	string tooltipAdvanced 	// actual description of the ability
+
 	// something missing?
 	// ------------------------ //
 
@@ -94,13 +95,17 @@ class HeroAbility
 
 	function getAbility() returns ability
 		return this.abil
+
+	function getAbilityId() returns int
+		return ABIL_ID
 	
 	// reduces the cooldown of a given ability based on a flat amount
 	function reduceCooldown(real amount)
-		real actual=BlzGetUnitAbilityCooldown(hero.getHero(), ABIL_ID, 1)-amount
+		real actual=BlzGetUnitAbilityCooldownRemaining(hero.getHero(), ABIL_ID)-amount
 		BlzSetUnitAbilityCooldown(hero.getHero(),ABIL_ID,1,actual)
 		
 	// ------------------------------------------
+
 	// Returns the maximum cooldown of a given ability
 	function getCooldownMax() returns real
 		real cooldown=BlzGetUnitAbilityCooldown(hero.getHero(), ABIL_ID, GetUnitAbilityLevel(hero.getHero(),ABIL_ID))
