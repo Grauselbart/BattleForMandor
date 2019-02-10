@@ -225,9 +225,12 @@ public constant idLeoP=compiletime(ABIL_ID_GEN.next())
 		..presetIcon(Icons.bTNAnkh)
 
 init
-	setupUnit()
+	trigger tmp=CreateTrigger()
+	TriggerRegisterPlayerChatEvent(tmp, Player(0), "hi", false)
+	tmp.addAction(function setupUnit)
 
-function setupUnit()
+function setupUnit() // corrupted
+	print("Test")
 	ability a=abilityFromIndex(idLeoP)
 	let leoP=new HeroAbility(a, idLeoP)
 	a=abilityFromIndex(idLeoQ)
