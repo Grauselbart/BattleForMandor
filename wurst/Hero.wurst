@@ -1,6 +1,5 @@
 package Hero
 import LinkedList
-import UnitIds
 import ChannelAbilityPreset
 import Icons
 import EventHelper
@@ -11,7 +10,7 @@ import EventHelper
 
 let PLAYER_HEROES = new LinkedList<PlayerHero>
 
-class PlayerHero
+public abstract class PlayerHero
 	// Unit
 	unit hero
 
@@ -40,6 +39,7 @@ class PlayerHero
 	// something missing?
 
 	// ------------------------ //
+	construct()
 	construct(unit u)
 		this.hero=u
 
@@ -90,8 +90,7 @@ class PlayerHero
 		R.reduceCooldown(amount, hero)
 
 	
-class HeroAbility
-	ability abil			// actual ability
+abstract class HeroAbility
 	int ABIL_ID				// ability ID
 	real cooldown			// maximum cooldown
 	int manacost			// maximum mana cost
@@ -104,12 +103,8 @@ class HeroAbility
 	// something missing?
 	// ------------------------ //
 
-	construct(ability a, int i)
-		this.abil=a
+	construct(int i)
 		this.ABIL_ID=i
-
-	function getAbility() returns ability
-		return this.abil
 
 	function getAbilityId() returns int
 		return this.ABIL_ID
@@ -131,32 +126,7 @@ class HeroAbility
 		real cooldown=BlzGetUnitAbilityCooldownRemaining(u, ABIL_ID)
 		return cooldown
 
-
-public constant idLeo=compiletime(HERO_ID_GEN.next())
-@compiletime function createHero()
-	new HeroDefinition(idLeo, UnitIds.paladin)
-		..setProperNames("Leonara")
-		..setProperNamesUsed(1)
-		..setName("Paladin of Wrath")
-		..setStartingAgility(0)
-		..setStartingIntelligence(0)
-		..setStartingStrength(0)
-		..setAgilityPerLevel(0)
-		..setIntelligencePerLevel(0)
-		..setStrengthPerLevel(0)
-		..setHitPointsMaximumBase(500)
-		..setHitPointsRegenerationRate(0)
-		..setManaInitialAmount(9999999)
-		..setManaMaximum(250)
-		..setManaRegeneration(0)
-		..setAttack1DamageBase(3)
-		..setAttack1DamageNumberofDice(2)
-		..setAttack1DamageSpillDistance(6)
-		..setSpeedBase(300)
-		..hideHeroDeathMsg(true)
-		..setFoodCost(0)
-
-public constant idLeoQ=compiletime(ABIL_ID_GEN.next())
+public let idLeoQ=compiletime(ABIL_ID_GEN.next())
 @compiletime function createAbilityLeoQ()
 	new ChannelAbilityPreset(idLeoQ, 1,true)
 		..presetTargetTypes(Targettype.NONE)
@@ -169,7 +139,7 @@ public constant idLeoQ=compiletime(ABIL_ID_GEN.next())
 		..presetButtonPosNormal(0, 2)
 		..presetIcon(Icons.bTNDivineShieldOff)
 
-public constant idLeoW=compiletime(ABIL_ID_GEN.next())
+public let idLeoW=compiletime(ABIL_ID_GEN.next())
 @compiletime function createAbilityLeoW()
 	new ChannelAbilityPreset(idLeoW, 1,true)
 		..presetTargetTypes(Targettype.UNIT)
@@ -183,7 +153,7 @@ public constant idLeoW=compiletime(ABIL_ID_GEN.next())
 		..presetButtonPosNormal(1, 2)
 		..presetIcon(Icons.bTNFaerieFire)
 
-public constant idLeoE=compiletime(ABIL_ID_GEN.next())
+public let idLeoE=compiletime(ABIL_ID_GEN.next())
 @compiletime function createAbilityLeoE()
 	new ChannelAbilityPreset(idLeoE, 1,true)
 		..presetTargetTypes(Targettype.NONE)
@@ -196,7 +166,7 @@ public constant idLeoE=compiletime(ABIL_ID_GEN.next())
 		..presetButtonPosNormal(2, 2)
 		..presetIcon(Icons.bTNAbsorbMagic)
 
-public constant idLeoR=compiletime(ABIL_ID_GEN.next())
+public let idLeoR=compiletime(ABIL_ID_GEN.next())
 @compiletime function createAbilityLeoR()
 	new ChannelAbilityPreset(idLeoR, 1,true)
 		..presetTargetTypes(Targettype.UNIT)
@@ -210,7 +180,7 @@ public constant idLeoR=compiletime(ABIL_ID_GEN.next())
 		..presetButtonPosNormal(3, 2)
 		..presetIcon(Icons.bTNImmolationOn)
 		
-public constant idLeoP=compiletime(ABIL_ID_GEN.next())
+public let idLeoP=compiletime(ABIL_ID_GEN.next())
 @compiletime function createAbilityLeoP()
 	new ChannelAbilityPreset(idLeoP, 1,true)
 		..presetTargetTypes(Targettype.PASSIVE)
@@ -229,22 +199,8 @@ init
 	TriggerRegisterPlayerChatEvent(tmp, Player(0), "hi", false)
 	tmp.addAction(function setupUnit)
 
-function setupUnit() // corrupted
+function setupUnit()
 	print("Test")
-	ability a=abilityFromIndex(idLeoP)
-	let leoP=new HeroAbility(a, idLeoP)
-	a=abilityFromIndex(idLeoQ)
-	let leoQ=new HeroAbility(a, idLeoQ)
-	a=abilityFromIndex(idLeoW)
-	let leoW=new HeroAbility(a, idLeoW)
-	a=abilityFromIndex(idLeoE)
-	let leoE=new HeroAbility(a, idLeoE)
-	a=abilityFromIndex(idLeoR)
-	let leoR=new HeroAbility(a, idLeoR)
-	unit u=createUnit(Player(0),idLeo,vec2(0,0),angle(0))
-	PlayerHero LEONARA=new PlayerHero(u,leoP,leoQ,leoW,leoE,leoR)
-	PLAYER_HEROES.add(LEONARA)
-
 
 
 

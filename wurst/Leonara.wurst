@@ -1,0 +1,33 @@
+package Leonara
+
+import Hero
+import UnitIds
+import ChannelAbilityPreset
+
+
+public let HERO_ID_LEONARA=compiletime(HERO_ID_GEN.next())
+@compiletime function createHero()
+	new HeroDefinition(HERO_ID_LEONARA, UnitIds.paladin)
+		..setProperNames("Leonara")
+		..setProperNamesUsed(1)
+		..setName("Paladin of Wrath")
+		..setStartingAgility(0)
+		..setStartingIntelligence(0)
+		..setStartingStrength(0)
+		..setAgilityPerLevel(0)
+		..setIntelligencePerLevel(0)
+		..setStrengthPerLevel(0)
+		..setHitPointsMaximumBase(500)
+		..setHitPointsRegenerationRate(0)
+		..setManaInitialAmount(9999999)
+		..setManaMaximum(250)
+		..setManaRegeneration(0)
+		..setAttack1DamageBase(3)
+		..setAttack1DamageNumberofDice(2)
+		..setAttack1DamageSpillDistance(6)
+		..setSpeedBase(300)
+		..hideHeroDeathMsg(true)
+        ..setFoodCost(0)
+        
+class Leonara extends PlayerHero
+
