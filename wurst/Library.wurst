@@ -1,0 +1,50 @@
+package Library
+import Hero
+
+/*
+// Reduces the cooldown of each ability based on a flat amount
+function reduceGlobalCooldownFlatRemaining(real amount, unit u)
+	reduceCooldown(amount, u, HERO_SPELL_Q)
+	reduceCooldown(amount, u, HERO_SPELL_W)
+	reduceCooldown(amount, u, HERO_SPELL_E)
+	reduceCooldown(amount, u, HERO_SPELL_R)
+
+// Reduces the cooldown of each ability based on the maximum cooldown and a given percentage
+function reduceGlobalCooldownPercentMax(real percentage, unit u)
+		real amount
+		amount=Q.getCooldownMax(i)*percentage
+		Q.reduceCooldown(amount, u)
+		amount=W.getCooldownMax(u)*percentage
+		W.reduceCooldown(amount, u)
+		amount=E.getCooldownMax(u)*percentage
+		E.reduceCooldown(amount, u)
+		amount=R.getCooldownMax(u)*percentage
+		R.reduceCooldown(amount, u)
+
+// Reduces the cooldown of each ability based on the remaining cooldown and a given percentage
+function reduceGlobalCooldownPercentRemaining(real percentage, unit u)
+		real amount=Q.getCooldownRemaining(u)*percentage
+		Q.reduceCooldown(amount, u)
+		amount=W.getCooldownRemaining(u)*percentage
+		W.reduceCooldown(amount, u)
+		amount=E.getCooldownRemaining(u)*percentage
+		E.reduceCooldown(amount, u)
+		amount=R.getCooldownRemaining(u)*percentage
+		R.reduceCooldown(amount, u)
+*/
+
+// reduces the cooldown of a given ability based on a flat amount
+function reduceCooldown(real amount, unit u, int id)
+		real actual=BlzGetUnitAbilityCooldownRemaining(u, id)-amount
+		BlzSetUnitAbilityCooldown(u,id,1,actual)
+		
+		// ------------------------------------------
+// Returns the maximum cooldown of a given ability
+function getCooldownMax(unit u, int id) returns real
+		real cooldown=BlzGetUnitAbilityCooldown(u, id, GetUnitAbilityLevel(u,id))
+		return cooldown
+			
+// Returns the remaining cooldown of a given ability
+function getCooldownRemaining(unit u, int id) returns real
+		real cooldown=BlzGetUnitAbilityCooldownRemaining(u, id)
+		return cooldown

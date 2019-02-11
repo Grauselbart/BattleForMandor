@@ -27,7 +27,8 @@ public let HERO_ID_LEONARA=compiletime(HERO_ID_GEN.next())
 		..setAttack1DamageSpillDistance(6)
 		..setSpeedBase(300)
 		..hideHeroDeathMsg(true)
-        ..setFoodCost(0)
-        
+		..setFoodCost(0)
+
 class Leonara extends PlayerHero
+
 
