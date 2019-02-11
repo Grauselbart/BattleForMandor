@@ -1,5 +1,4 @@
 package Library
-import Hero
 
 /*
 // Reduces the cooldown of each ability based on a flat amount

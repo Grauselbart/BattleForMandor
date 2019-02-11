@@ -1,0 +1,67 @@
+package Hero
+import LinkedList
+
+let PLAYER_HEROES = new LinkedList<PlayerHero>
+
+public abstract class PlayerHero
+	// Unit
+	unit HERO_UNIT
+
+	// Abilities
+	int HERO_SPELL_P
+	int HERO_SPELL_Q
+	int HERO_SPELL_W
+	int HERO_SPELL_E
+	int HERO_SPELL_R
+
+	// Stats
+	real 	HERO_STAT_HP 					// hit point maximum
+	real 	HERO_STAT_HPreg					// hit point regeneration per second
+	real 	HERO_STAT_MANA 					// mana maximum
+	real 	HERO_STAT_MANAreg				// mana regeneration per second
+	real 	HERO_STAT_CRITchance			// chance to crit
+	real 	HERO_STAT_CRITdamage			// increased crit damage, standard is 200%
+	int 	HERO_STAT_ARMOR 				// hero armor
+	int 	HERO_STAT_DAMAGEflat			// flat hero damage
+	int		HERO_STAT_DAMAGEdice			// Wich damage dice
+	int 	HERO_STAT_DAMAGErolls			// how many rolls
+	real 	HERO_STAT_TENACITY 				// Status resistance
+	real 	HERO_STAT_CONCENTRATION			// buff/debuff duration multiplier
+	real 	HERO_STAT_COOLDOWNpercent 		// global % CDR
+	real 	HERO_STAT_COOLDOWNflat 			// global flat CDR
+	real 	HERO_STAT_MOVEMENTSPEEDbonus 	// in %
+	real 	HERO_STAT_ATTACKSPEEDbonus		// in %
+
+
+	// something missing?
+
+	// ------------------------ //
+	construct()
+
+	construct(unit u)
+		this.HERO_UNIT=u
+
+	construct(unit h, int p,int q, int w, int e, int r)
+		this.HERO_UNIT=h
+		this.HERO_SPELL_P=p
+		this.HERO_SPELL_Q=q
+		this.HERO_SPELL_W=w
+		this.HERO_SPELL_E=e
+		this.HERO_SPELL_R=r
+		UnitAddAbility(this.HERO_UNIT, HERO_SPELL_P)
+		UnitAddAbility(this.HERO_UNIT, HERO_SPELL_Q)
+		UnitAddAbility(this.HERO_UNIT, HERO_SPELL_W)
+		UnitAddAbility(this.HERO_UNIT, HERO_SPELL_E)
+		UnitAddAbility(this.HERO_UNIT, HERO_SPELL_R)
+
+	function getHero() returns unit
+		return this.HERO_UNIT
+	
+// Testing
+init
+	trigger tmp=CreateTrigger()
+	TriggerRegisterPlayerChatEvent(tmp, Player(0), "hi", false)
+	tmp.addAction(function setupUnit)
+
+function setupUnit()
+	print("Test")
