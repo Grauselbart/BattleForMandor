@@ -1,0 +1,13 @@
+package WrathfulSmite
+import EventHelper
+
+
+
+let WS=CreateTrigger()
+        ..addAction(function initSpell)
+        ..registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
+
+
+
+function initSpell()
+
