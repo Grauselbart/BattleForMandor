@@ -14,35 +14,20 @@ public abstract class PlayerHero
 	int HERO_SPELL_E
 	int HERO_SPELL_R
 
-	// Additional Stats					//INTERGER	// DISCRIPTION
-	real 	HERO_STAT_HPreg				//'HPR'		// hit point regeneration per second
-	real 	HERO_STAT_MANAreg			//'MAR'		// mana regeneration per second
-	real 	HERO_STAT_CRITchance		//'CRC'		// chance to crit
-	real 	HERO_STAT_CRITdamage		//'CRD'		// increased crit damage, standard is 200%
-	real 	HERO_STAT_TENACITY 			//'TEN'		// Status resistance
-	real 	HERO_STAT_CONCENTRATION		//'CON'		// buff/debuff duration multiplier
-	real 	HERO_STAT_COOLDOWNpercent 	//'CDP'		// global % CDR
-	real 	HERO_STAT_COOLDOWNflat 		//'CDF'		// global flat CDR
+	// Additional Stats						//INTERGER	// DISCRIPTION
+	real 	HERO_STAT_HPREG=0.				//'HPRE'		// hit point regeneration per second
+	real 	HERO_STAT_MANAREG=0.			//'MARE'		// mana regeneration per second
+	real 	HERO_STAT_CRITCHANCE=0.			//'CRCH'		// chance to crit
+	real 	HERO_STAT_CRITDAMAGE=0.			//'CRDA'		// increased crit damage, standard is 200%
+	real 	HERO_STAT_TENACITY=0. 			//'TENA'		// Status resistance
+	real 	HERO_STAT_CONCENTRATION=0.		//'CONC'		// buff/debuff duration multiplier
+	real 	HERO_STAT_COOLDOWNPERCENT=0. 	//'CDPE'		// global % CDR
+	real 	HERO_STAT_COOLDOWNFLAT=0. 		//'CDFL'		// global flat CDR
 	// something missing?
 
 	// ------------------------ //
-	construct()
-
-	construct(unit u)
-		this.HERO_UNIT=u
-
-	construct(unit u, int p,int q, int w, int e, int r)
-		this.HERO_UNIT=u
-		this.HERO_SPELL_P=p
-		this.HERO_SPELL_Q=q
-		this.HERO_SPELL_W=w
-		this.HERO_SPELL_E=e
-		this.HERO_SPELL_R=r
-		UnitAddAbility(this.HERO_UNIT, HERO_SPELL_P)
-		UnitAddAbility(this.HERO_UNIT, HERO_SPELL_Q)
-		UnitAddAbility(this.HERO_UNIT, HERO_SPELL_W)
-		UnitAddAbility(this.HERO_UNIT, HERO_SPELL_E)
-		UnitAddAbility(this.HERO_UNIT, HERO_SPELL_R)
+	construct(player owner, int unitId, real posX, real posY, real angle)
+		HERO_UNIT=createUnit(owner, unitId, vec2(posX,posY), angle(angle))
 
 	function getHero() returns unit
 		return this.HERO_UNIT
@@ -50,39 +35,30 @@ public abstract class PlayerHero
 	function getStat(int i) returns real
 		real r=0.0
 		switch(i)
-			case 'HPR'
-				r=HERO_STAT_HPreg
-			case 'MAR'
-				r=HERO_STAT_MANAreg
-			case 'CRC'
-				r=HERO_STAT_CRITchance
-			case 'CRD'
-				r=HERO_STAT_CRITdamage
-			case 'TEN'
+			case 'HPRE'
+				r=HERO_STAT_HPREG
+			case 'MARE'
+				r=HERO_STAT_MANAREG
+			case 'CRCH'
+				r=HERO_STAT_CRITCHANCE
+			case 'CRDA'
+				r=HERO_STAT_CRITDAMAGE
+			case 'TENA'
 				r=HERO_STAT_TENACITY
-			case 'CON'
+			case 'CONC'
 				r=HERO_STAT_CONCENTRATION
-			case 'CDP'
-				r=HERO_STAT_COOLDOWNpercent
-			case 'CDF'
-				r=HERO_STAT_COOLDOWNflat
+			case 'CDPE'
+				r=HERO_STAT_COOLDOWNPERCENT
+			case 'CDFL'
+				r=HERO_STAT_COOLDOWNFLAT
 		return r
 	
 // returns the PlayerHero of given unit. if the unit is not a PlayerHero, it returns null
 public function getPlayerHero(unit u) returns PlayerHero
 	PlayerHero check=null
-	PlayerHero current=null
 	LLIterator<PlayerHero> i=PLAYER_HEROES.iterator() //creates an iterator for the PLAYER_HEROES linked list, wich contains the hero of each player
 	while i.hasNext()	//checks the whole list if the given unit is a PlayerHero.
-		current=i.next()
-		if u==current.getHero()
-			check=current
+		check=i.next()
+		if u==check.getHero()
+			break
 	return check
-
-init
-	trigger tmp=CreateTrigger()
-	TriggerRegisterPlayerChatEvent(tmp, Player(0), "hi", false)
-	tmp.addAction(function setupUnit)
-
-function setupUnit()
-	print("Test")

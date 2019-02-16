@@ -1,34 +1,26 @@
 package Leonara
 
 import Hero
-import UnitIds
-import ChannelAbilityPreset
+import Leonara_Data
 
-
-public let HERO_ID_LEONARA=compiletime(HERO_ID_GEN.next())
-@compiletime function createHero()
-	new HeroDefinition(HERO_ID_LEONARA, UnitIds.paladin)
-		..setProperNames("Leonara")
-		..setProperNamesUsed(1)
-		..setName("Paladin of Wrath")
-		..setStartingAgility(0)
-		..setStartingIntelligence(0)
-		..setStartingStrength(0)
-		..setAgilityPerLevel(0)
-		..setIntelligencePerLevel(0)
-		..setStrengthPerLevel(0)
-		..setHitPointsMaximumBase(500)
-		..setHitPointsRegenerationRate(0)
-		..setManaInitialAmount(9999999)
-		..setManaMaximum(250)
-		..setManaRegeneration(0)
-		..setAttack1DamageBase(3)
-		..setAttack1DamageNumberofDice(2)
-		..setAttack1DamageSpillDistance(6)
-		..setSpeedBase(300)
-		..hideHeroDeathMsg(true)
-		..setFoodCost(0)
 
 class Leonara extends PlayerHero
+	construct(player owner, real posX, real posY, real angle)
+		super(owner, HERO_ID_LEONARA, posX, posY, angle)
+		print("Leonara was picked by " + GetPlayerName(owner))
+		UnitAddAbility(this.getHero(), idLeoP)
+		UnitAddAbility(this.getHero(), idLeoQ)
+		UnitAddAbility(this.getHero(), idLeoW)
+		UnitAddAbility(this.getHero(), idLeoE)
+		UnitAddAbility(this.getHero(), idLeoR)
+		PLAYER_HEROES.add(this)
 
+init
+	trigger tmp=CreateTrigger()
+	TriggerRegisterPlayerChatEvent(tmp, Player(0), "hi", false)
+	tmp.addAction(function setupUnit)
+
+function setupUnit()
+	print("Test")
+	new Leonara(Player(0),0,0,0)
 
