@@ -1,13 +1,10 @@
 package Hero
 import LinkedList
-import Unit
 
-
-
-let PLAYER_HEROES = new LinkedList<PlayerHero>
+public LinkedList<PlayerHero> PLAYER_HEROES = new LinkedList<PlayerHero>
 
 public abstract class PlayerHero
-	// Unit
+	// actual hero unit
 	unit HERO_UNIT
 
 	// Abilities
@@ -17,15 +14,15 @@ public abstract class PlayerHero
 	int HERO_SPELL_E
 	int HERO_SPELL_R
 
-	// Additional Stats
-	real 	HERO_STAT_HPreg					// hit point regeneration per second
-	real 	HERO_STAT_MANAreg				// mana regeneration per second
-	real 	HERO_STAT_CRITchance			// chance to crit
-	real 	HERO_STAT_CRITdamage			// increased crit damage, standard is 200%
-	real 	HERO_STAT_TENACITY 				// Status resistance
-	real 	HERO_STAT_CONCENTRATION			// buff/debuff duration multiplier
-	real 	HERO_STAT_COOLDOWNpercent 		// global % CDR
-	real 	HERO_STAT_COOLDOWNflat 			// global flat CDR
+	// Additional Stats					//INTERGER	// DISCRIPTION
+	real 	HERO_STAT_HPreg				//'HPR'		// hit point regeneration per second
+	real 	HERO_STAT_MANAreg			//'MAR'		// mana regeneration per second
+	real 	HERO_STAT_CRITchance		//'CRC'		// chance to crit
+	real 	HERO_STAT_CRITdamage		//'CRD'		// increased crit damage, standard is 200%
+	real 	HERO_STAT_TENACITY 			//'TEN'		// Status resistance
+	real 	HERO_STAT_CONCENTRATION		//'CON'		// buff/debuff duration multiplier
+	real 	HERO_STAT_COOLDOWNpercent 	//'CDP'		// global % CDR
+	real 	HERO_STAT_COOLDOWNflat 		//'CDF'		// global flat CDR
 	// something missing?
 
 	// ------------------------ //
@@ -50,7 +47,38 @@ public abstract class PlayerHero
 	function getHero() returns unit
 		return this.HERO_UNIT
 	
-// Testing
+	function getStat(int i) returns real
+		real r=0.0
+		switch(i)
+			case 'HPR'
+				r=HERO_STAT_HPreg
+			case 'MAR'
+				r=HERO_STAT_MANAreg
+			case 'CRC'
+				r=HERO_STAT_CRITchance
+			case 'CRD'
+				r=HERO_STAT_CRITdamage
+			case 'TEN'
+				r=HERO_STAT_TENACITY
+			case 'CON'
+				r=HERO_STAT_CONCENTRATION
+			case 'CDP'
+				r=HERO_STAT_COOLDOWNpercent
+			case 'CDF'
+				r=HERO_STAT_COOLDOWNflat
+		return r
+	
+// returns the PlayerHero of given unit. if the unit is not a PlayerHero, it returns null
+public function getPlayerHero(unit u) returns PlayerHero
+	PlayerHero check=null
+	PlayerHero current=null
+	LLIterator<PlayerHero> i=PLAYER_HEROES.iterator() //creates an iterator for the PLAYER_HEROES linked list, wich contains the hero of each player
+	while i.hasNext()	//checks the whole list if the given unit is a PlayerHero.
+		current=i.next()
+		if u==current.getHero()
+			check=current
+	return check
+
 init
 	trigger tmp=CreateTrigger()
 	TriggerRegisterPlayerChatEvent(tmp, Player(0), "hi", false)

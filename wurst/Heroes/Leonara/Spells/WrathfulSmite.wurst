@@ -1,13 +1,60 @@
 package WrathfulSmite
-import EventHelper
+import Hero
+import LinkedList
+import Leonara_Data
 
+public LinkedList<WrathfulSmiteSpell> SPELL_INSTANCES_WRATHFULSMITE=new LinkedList<WrathfulSmiteSpell>()
 
+class WrathfulSmiteSpell
+        unit caster
+        real duration
+        real damage
+        
+        construct(PlayerHero h)
+                caster=h.getHero()
+                duration=6*(1+ h.getStat('CON'))
+                damage=calcDamage()
+                run()
+
+        construct(unit u)
+                caster=u
+                duration=6
+                damage=calcDamage()
+                run()
+
+        function calcDamage() returns real
+                int rolls=caster.getDiceNumber(0)       // Number of damage dice
+                int sides=caster.getDiceSides(0)        // type of dice, number of sides of each dice
+                int flat=caster.getBaseDamage(0)        // flat damage of unit, without any dice
+                real amount=0
+                // simulates the dice rolls and add them together. number of rolls = number of dices
+                for int j=0 to rolls
+                        amount+=GetRandomInt(1, sides)
+
+                amount+=flat    // adds the flat damage to the random amount
+                return amount
+
+        function run()
+                SPELL_INSTANCES_WRATHFULSMITE.add(this)
+                //some stuff here for the actual spell
 
 let WS=CreateTrigger()
         ..addAction(function initSpell)
         ..registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
 
-
+function thisSpell() returns boolean
+        return GetSpellAbilityId()==idLeoQ
 
 function initSpell()
+        if thisSpell()
+                unit u=GetTriggerUnit()
+                PlayerHero h=getPlayerHero(u)
+                //depending on if the unit is a PlayerHero or not, the new spell instance is created
+                if h==null
+                        new WrathfulSmiteSpell(u)
+                else
+                        new WrathfulSmiteSpell(h)
+        
+
+
 
