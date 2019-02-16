@@ -9,10 +9,15 @@ class Leonara extends PlayerHero
 		super(owner, HERO_ID_LEONARA, posX, posY, angle)
 		print("Leonara was picked by " + GetPlayerName(owner))
 		UnitAddAbility(this.getHero(), idLeoP)
+		HERO_SPELL_P=idLeoP
 		UnitAddAbility(this.getHero(), idLeoQ)
+		HERO_SPELL_Q=idLeoQ
 		UnitAddAbility(this.getHero(), idLeoW)
+		HERO_SPELL_W=idLeoW
 		UnitAddAbility(this.getHero(), idLeoE)
+		HERO_SPELL_E=idLeoE
 		UnitAddAbility(this.getHero(), idLeoR)
+		HERO_SPELL_R=idLeoR
 		PLAYER_HEROES.add(this)
 
 init
