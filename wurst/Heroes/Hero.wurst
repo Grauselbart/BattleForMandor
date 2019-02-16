@@ -14,7 +14,7 @@ public abstract class PlayerHero
 	int HERO_SPELL_E
 	int HERO_SPELL_R
 
-	// Additional Stats						//INTERGER	// DISCRIPTION
+	// Additional Stats						//INTERGER		// DISCRIPTION
 	real 	HERO_STAT_HPREG=0.				//'HPRE'		// hit point regeneration per second
 	real 	HERO_STAT_MANAREG=0.			//'MARE'		// mana regeneration per second
 	real 	HERO_STAT_CRITCHANCE=0.			//'CRCH'		// chance to crit
@@ -23,6 +23,7 @@ public abstract class PlayerHero
 	real 	HERO_STAT_CONCENTRATION=0.		//'CONC'		// buff/debuff duration multiplier
 	real 	HERO_STAT_COOLDOWNPERCENT=0. 	//'CDPE'		// global % CDR
 	real 	HERO_STAT_COOLDOWNFLAT=0. 		//'CDFL'		// global flat CDR
+	
 	// something missing?
 
 	// ------------------------ //
