@@ -45,9 +45,13 @@ class WrathfulSmiteSpell
                 //Create a timer that destorys the spell after its duration
                 print("Spell instance created. Current instances: " + SPELL_INSTANCES_WRATHFULSMITE.size().toString())
                 TimerStart(t, duration, false, function endSpell)
+                //Adds a buff !DOES NOT WORK!
+                caster.addAbility(BUFF_ID_WRATHFULSMITE)
         
         ondestroy
                 DestroyTimer(t)
+                //Removes the buff !DOES NOT WORK!
+                caster.removeAbility(BUFF_ID_WRATHFULSMITE)
                 caster=null
                 print("Spell instance removed. Current instances: " + SPELL_INSTANCES_WRATHFULSMITE.size().toString())
 

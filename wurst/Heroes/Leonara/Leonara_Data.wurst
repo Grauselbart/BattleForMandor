@@ -3,6 +3,8 @@ package Leonara_Data
 import ChannelAbilityPreset
 import Icons
 import UnitIds
+import BuffObjEditing
+
 
 public let idLeoQ=compiletime(ABIL_ID_GEN.next())
 @compiletime function createAbilityLeoQ()
@@ -95,3 +97,14 @@ public let HERO_ID_LEONARA=compiletime(HERO_ID_GEN.next())
 		..setSpeedBase(300)
 		..hideHeroDeathMsg(true)
 		..setFoodCost(0)
+
+public let BUFF_ID_WRATHFULSMITE=compiletime(BUFF_ID_GEN.next())
+@compiletime function createBuff()
+	new BuffDefinition(BUFF_ID_WRATHFULSMITE, 'BHds')
+		..setName(1, "Wrathful Smite")
+		..setCaster(1, "Abilities/Spells/Human/DivineShield/DivineShieldTarget.mdl")
+		..setCasterAttachments(1, 1)
+		..setTargetAttachmentPoint0(1, "weapon")
+		..setTargetAttachments(1, 1)
+		..setTooltipNormal(1, "Wrathful Smite")
+		..setTooltipNormalExtended(1, "Next hit with a basic attack deals additional damage")

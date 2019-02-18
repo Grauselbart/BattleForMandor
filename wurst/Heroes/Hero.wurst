@@ -24,17 +24,18 @@ public abstract class PlayerHero
 	real 	HERO_STAT_COOLDOWNPERCENT=0. 	//'CDPE'		// global % CDR
 	real 	HERO_STAT_COOLDOWNFLAT=0. 		//'CDFL'		// global flat CDR
 	
-	// something missing?
+	// stats missing?
 
-	// ------------------------ //
 	construct(player owner, int unitId, real posX, real posY, real angle)
 		HERO_UNIT=createUnit(owner, unitId, vec2(posX,posY), angle(angle))
 
+	//returns the hero unit
 	function getHero() returns unit
 		return this.HERO_UNIT
 	
+	//Returns the stat with the given id. the IDs are listed above and in the function itself. Just check.
 	function getStat(int i) returns real
-		real r=0.0
+		real r
 		switch(i)
 			case 'HPRE'
 				r=HERO_STAT_HPREG
@@ -52,14 +53,22 @@ public abstract class PlayerHero
 				r=HERO_STAT_COOLDOWNPERCENT
 			case 'CDFL'
 				r=HERO_STAT_COOLDOWNFLAT
+			default
+				r=0.
+				//Debug message if the given stat is invalid
+				print("ERROR: "+i.toString()+" not found as a hero stat!")
 		return r
 	
-// returns the PlayerHero of given unit. if the unit is not a PlayerHero, it returns null
+//returns the PlayerHero of given unit. 
+//returns null if the unit is not a PlayerHero.
 public function getPlayerHero(unit u) returns PlayerHero
 	PlayerHero check=null
-	LLIterator<PlayerHero> i=PLAYER_HEROES.iterator() //creates an iterator for the PLAYER_HEROES linked list, wich contains the hero of each player
-	while i.hasNext()	//checks the whole list if the given unit is a PlayerHero.
+	//checks the whole list if the given unit is a PlayerHero.
+	LLIterator<PlayerHero> i=PLAYER_HEROES.iterator()
+	while i.hasNext()	
 		check=i.next()
 		if u==check.getHero()
 			break
+	if check==null
+		print("ERROR: '"+ u.getName() + "' is no PlayerHero!")
 	return check
