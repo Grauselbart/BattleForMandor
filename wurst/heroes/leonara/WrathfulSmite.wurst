@@ -10,6 +10,7 @@ class WrathfulSmiteSpell
         real duration
         real damage
         timer t
+        effect e
 
         construct(PlayerHero h)
                 caster=h.getHero()
