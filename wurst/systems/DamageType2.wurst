@@ -1,0 +1,105 @@
+package DamageType2
+
+// Use this package for finding the damage type in the context of a
+// DamageDetection handler. Typically this means differentiating between spells
+// and basic attacks.
+import DamageDetection
+import CombatText
+
+class DelayDat
+    unit target
+    unit source
+    real damage
+
+public enum DamageType
+    INGAME
+    ATTACK
+    SPELL
+    DOT
+
+var lastDamageType = DamageType.INGAME
+/** In the context of a damage detection handler, get the type of damage dealt.
+    Returns one of:
+
+        DamageType.RANGED
+        DamageType.ATTACK
+        DamageType.SPELL
+        DamageType.INGAME
+
+    Be sure that if you use the `DamageType` package, that all subscribers of
+    `DamageDetection` also `import DamageType`, or you may experience race
+    conditions.
+
+    Example Usage:
+
+        import DamageDetection
+        import DamageType
+
+        init
+            addOnDamageFunc(Condition(() -> begin
+                switch getDamageType()
+                    case ATTACK
+                        print(GetEventDamageSource().getName() + " attacked " + GetTriggerUnit().getName())
+                    case SPELL
+                        print(GetEventDamageSource().getName() + " used a sell on " + GetTriggerUnit().getName())
+                    default
+                        skip
+            end))
+*/
+public function getDamageType() returns DamageType
+    if lastDamageType == DamageType.SPELL
+        return DamageType.SPELL
+    else if lastDamageType == DamageType.DOT
+        return DamageType.DOT
+    else if lastDamageType == DamageType.ATTACK
+        return DamageType.ATTACK
+    return DamageType.INGAME
+
+/** Deal an exact amount of damage to `target`, crediting kill experience and
+    gold bounty to `attacker`.
+
+    Be sure that if you use the `DamageType` package, that all subscribers of
+    `DamageDetection` also `import DamageType`, or you may experience race
+    conditions. */
+public function unit.dealDamage(unit target, real damage, DamageType dmgtype)
+    let prevType   = lastDamageType
+    
+    lastDamageType = dmgtype
+    UnitDamageTarget(this, target, damage , true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, null)
+    lastDamageType = prevType
+
+
+// This is the method that will invert any negative spell damage. To function
+// properly, it *must* be the first handler in the DamageDetection handlers. To
+// ensure this, simply import DamageType in any package where you also import
+// DamageDetection (so long as you require the DamageType feature).
+function handler() returns bool
+    boolean nullDmg = false
+    var dmg = GetEventDamage()
+    let uS  = GetEventDamageSource()
+    let uT  = GetTriggerUnit()
+    let dT  = getDamageType()
+    // Ingame ranged attacks get replaced by missile system
+    if dT == DamageType.INGAME
+        if uS.isType(UNIT_TYPE_RANGED_ATTACKER)
+            nullDmg = true
+    //Hier Damage Modification reinmachen
+    var dmgModRel = 0.
+    var dmgModAbs = 0.
+    
+    var dmgEnd = dmg * (1+dmgModRel) + dmgModAbs
+    // Set dealt damage
+    if nullDmg == true
+        BlzSetEventDamage(0.)
+        dmgEnd = 0
+    else
+        BlzSetEventDamage(dmgEnd)
+    
+    // DamageNumbers
+    if dmgEnd > 0.7
+        uT.damageText(dmgEnd, uS.getOwner())
+
+    return false
+
+init
+    addOnDamageFunc(Condition(function handler))

@@ -1,0 +1,94 @@
+package CombatText
+
+// for custom centered texttags
+constant real 	MEAN_CHAR_WIDTH = 7
+constant real 	MAX_TEXT_SHIFT = 5000.0
+constant real 	DEFAULT_HEIGHT = 16.0
+constant real 	MAX_VELOCITY_X = 0.04
+constant real 	MAX_VELOCITY_Y = 0.08
+constant real 	MIN_VELOCITY_Y = 0.04
+constant real   SIGN_SHIFT = 16.0
+constant string MISS = "Miss"
+constant string BLOCK = "Blocked"
+
+//===========================================================================
+//   Schadensanzeige Normal
+//===========================================================================
+public function unit.damageText(real dmg, player source)
+	let size =   (dmg > 500 ? 12.5 : (((dmg/500.) * 5.) + 7.5))
+	var green = (dmg > 500 ? 0 : R2I(((dmg/500.) * -255.) + 255.))
+	var blue = (dmg > 500 ? 0 : R2I(((dmg/250.) * -255.) + 255.))
+	let clr = color(255, green, blue).toColorString()
+	let text = I2S(R2I(dmg))
+	let velX = GetRandomReal(-MAX_VELOCITY_X, MAX_VELOCITY_X)
+	let velY = GetRandomReal(MIN_VELOCITY_Y, MAX_VELOCITY_Y)
+	let pS = source
+	let pT = this.getOwner()
+	//Source
+	CreateTextTag()
+		..setText(clr + text, size)
+		..setPos(this.getX(), this.getY(), DEFAULT_HEIGHT)
+		..setVelocity(velX, velY)
+		..setVisibility(localPlayer == pS)
+		..setFadepoint(2.0)
+		..setLifespan(2.0)
+		..setPermanent(false)
+	//Target
+	if pS != pT
+		CreateTextTag()
+			..setText(clr + text, size)
+			..setPos(this.getX(), this.getY(), DEFAULT_HEIGHT)
+			..setVelocity(velX, velY)
+			..setVisibility(localPlayer == pT)
+			..setFadepoint(2.0)
+			..setLifespan(2.0)
+			..setPermanent(false)
+
+public function unit.healText(real dmg, player source)
+	let size =   (dmg > 50 ? 12.5 : (((dmg/50.) * 5.) + 7.5))
+	var red = (dmg > 50 ? 0 : R2I(((dmg/50.) * -255.) + 255.))
+	var blue = (dmg > 50 ? 0 : R2I(((dmg/50.) * -255.) + 255.))
+	let clr = color(red, 255, blue).toColorString()
+	let text = I2S(R2I(dmg))
+	let velX = GetRandomReal(-MAX_VELOCITY_X, MAX_VELOCITY_X)
+	let velY = GetRandomReal(MIN_VELOCITY_Y, MAX_VELOCITY_Y)
+	let pS = source
+	let pT = this.getOwner()
+	//Source
+	CreateTextTag()
+		..setText(clr + text, size)
+		..setPos(this.getX(), this.getY(), DEFAULT_HEIGHT)
+		..setVelocity(velX, velY)
+		..setVisibility(localPlayer == pS)
+		..setFadepoint(2.0)
+		..setLifespan(2.0)
+		..setPermanent(false)
+	//Target
+	if pS != pT
+		CreateTextTag()
+			..setText(clr + text, size)
+			..setPos(this.getX(), this.getY(), DEFAULT_HEIGHT)
+			..setVelocity(velX, velY)
+			..setVisibility(localPlayer == pT)
+			..setFadepoint(2.0)
+			..setLifespan(2.0)
+			..setPermanent(false)
+
+public function destructable.damageText(real dmg, player source)
+	let size =   (dmg > 50 ? 12.5 : (((dmg/50.) * 5.) + 7.5))
+	var green = (dmg > 50 ? 0 : R2I(((dmg/50.) * -255.) + 255.))
+	var blue = (dmg > 50 ? 0 : R2I(((dmg/25.) * -255.) + 255.))
+	let clr = color(255, green, blue).toColorString()
+	let text = I2S(R2I(dmg))
+	let velX = GetRandomReal(-MAX_VELOCITY_X, MAX_VELOCITY_X)
+	let velY = GetRandomReal(MIN_VELOCITY_Y, MAX_VELOCITY_Y)
+	let pS = source
+	//Source
+	CreateTextTag()
+		..setText(clr + text, size)
+		..setPos(this.getX(), this.getY(), DEFAULT_HEIGHT)
+		..setVelocity(velX, velY)
+		..setVisibility(localPlayer == pS)
+		..setFadepoint(2.0)
+		..setLifespan(2.0)
+		..setPermanent(false)

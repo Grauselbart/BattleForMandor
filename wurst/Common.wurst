@@ -1,0 +1,95 @@
+package Common
+
+import RegisterEvents
+import ClosureForGroups
+import CombatText
+
+public player pCreeps = Player(PLAYER_NEUTRAL_AGGRESSIVE)
+
+public function effect.getPos() returns vec3
+	return vec3(this.getLocalX(), this.getLocalY(), this.getLocalZ())
+
+public function effect.setPos(vec3 pos)
+	this
+		..setX(pos.x)
+		..setY(pos.y)
+		..setZ(pos.z)
+
+public function effect.setPosRelative(vec3 pos)
+	this
+		..setX(pos.x)
+		..setY(pos.y)
+		..setZ(pos.z + pos.getTerrainZ())
+
+public function rnd() returns real
+	return GetRandomReal(0, 100)
+			
+public function setIntBetween(integer val, integer min, integer max) returns integer
+	if val <= min
+		return min
+	else if val >= max
+		return max
+	else
+		return val
+
+public function setRealBetween(real val, real min, real max) returns real
+	if val <= min
+		return min
+	else if val >= max
+		return max
+	else
+		return val
+
+public function rect.getRandomPos() returns vec2
+	let x = GetRandomReal(this.getMinX(), this.getMaxX())
+	let y = GetRandomReal(this.getMinY(), this.getMaxY())
+	return vec2(x,y)
+
+public function rndAngle() returns angle
+	return GetRandomReal(0, 360).asAngleDegrees()
+
+public function unit.addArmor(integer armor)
+	this.setArmor(this.getArmor()+armor)
+
+public function real.iS() returns string
+	// returns real rounded to integer number
+	return this.toInt().toString()
+
+public unit desChecker
+public function destructable.treeCheck() returns boolean
+	// check if destructable is tree
+	return IssueTargetOrderById(desChecker, 852018, this) and IssueImmediateOrderById(desChecker, 851972)
+
+real DESTRUCTABLE_ENUM_SIZE = 100.
+let destructableRect = Rect(-1*DESTRUCTABLE_ENUM_SIZE, -1*DESTRUCTABLE_ENUM_SIZE, DESTRUCTABLE_ENUM_SIZE, DESTRUCTABLE_ENUM_SIZE)
+boolean destHit = false
+
+public function unit.damageDestMelee(real range, angle facing, real damage) returns boolean
+	let pos = this.getPos()
+	let offsetPlus = pos.polarOffset(facing, range/2)
+	MoveRectTo(destructableRect, offsetPlus.x, offsetPlus.y)
+	destHit = false
+	forDestructablesInRect(destructableRect) des ->
+		if des.getLife() > 0 and des.treeCheck()
+			des.setLife(des.getLife() - damage)
+			des.damageText(damage, this.getOwner())
+			destHit = true
+	return destHit
+
+//Mouse Position
+public function player.getMousePos() returns vec2
+	return mousePos[this.getId()]
+
+public vec2 array mousePos
+init
+	// Create peasant for destructable checks (important for missile system but can also be used for other stuff)
+	desChecker = CreateUnit(Player(15), 'hpea', 0, 0, 0)
+	desChecker	..hide()
+				..addAbility('Aloc')
+				..addAbility('Ahar')
+				..removeAbility('Amov')
+	// Check mouse position all the time for smart casting
+	registerPlayerEvent(EVENT_PLAYER_MOUSE_MOVE) ->
+		let p = GetTriggerPlayer()
+		if p.getSlotState() == PLAYER_SLOT_STATE_PLAYING and p.getController() == MAP_CONTROL_USER
+			mousePos[p.getId()] = vec2(BlzGetTriggerPlayerMouseX(), BlzGetTriggerPlayerMouseY())

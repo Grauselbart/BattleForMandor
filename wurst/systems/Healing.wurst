@@ -1,0 +1,14 @@
+package Healing
+
+import CombatText
+
+function unit.healUnit(unit target, real amount)
+	var healModRel = 0.
+	var healModAbs = 0.
+	//Modification
+
+	//Give healing
+	let healing = amount *(1+ healModRel) + healModAbs
+	target.addHP(healing)
+	//Create floating text
+	target.healText(healing, this.getOwner())

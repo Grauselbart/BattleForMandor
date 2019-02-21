@@ -1,0 +1,61 @@
+package Missile
+
+import Common
+import HashMap
+import TerrainUtils
+import LinkedListModule
+import ClosureForGroups
+import CombatText
+
+import DamageDetection
+import DamageType2
+
+constant integer FPS = 30
+constant real FRQ = 1./FPS
+
+// variables that carry over to missile event triggers
+public effect   misTrigProjectile = null
+public unit     misTrigSource     = null
+public unit     misTrigTarget     = null
+public vec3     misTrigTargetPos  = vec3(0, 0, 0)
+public unit     misTrigHitUnit    = null
+public boolean  misTrigEndonUnit  = false
+
+// projectile trajectory
+public effect   misProjectile   = null
+public unit     misSource       = null
+public unit     misTarget       = null
+public vec3     misTargetPos    = vec3(0, 0, 0)
+public real     misMaxRange     = 0.
+public real     misSpeed        = 0.
+public real     misAccel        = 0.
+public angle    misAngle        = angle(0)
+public angle    misSpin         = angle(0)
+public angle    misArc          = angle(0)
+public angle    misTurnRate     = 45..asAngleDegrees()
+public real     misMinZ         = 50.
+
+// missile hit properties
+public real         misHitBox           = 0.
+public real         misHitDamage        = 0.
+public string       misHitEffect        = ""
+public string       misHitAttatch       = "origin"
+public DamageType   misDamageType       = DamageType.ATTACK
+public boolean      misLineAfterHit     = false
+public boolean      misHitEnemy         = true
+public boolean      misHitAlly          = false
+public boolean      misHitMagicImmune   = true
+public boolean      misHitDestructable  = true
+
+// missile end conditions
+public boolean  misEndOnHit         = true
+public boolean  misEndOnTarget      = true
+public boolean  misEndOnObstacle    = false
+
+// missile event trigger
+public trigger  misEndTrigger       = null
+public trigger  misHitTrigger       = null
+public trigger  misPeriodicTrigger  = null
+public integer  misPeriodicInt      = 1*FPS
+
+// tbc

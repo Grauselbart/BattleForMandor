@@ -1,0 +1,50 @@
+package SmartCast
+
+import ClosureTimers
+import Common
+
+let FREQ = .1
+public function unit.castMouse(real time, string anim, integer spellId, string order, real speed)
+    // Casts a spell at the mouse position when the casting time is finished
+    this.pause()
+    this.setAnimation(anim)
+    this.setTimeScale(speed)
+    doPeriodicallyTimed(FREQ, time) i ->
+        let target = this.getOwner().getMousePos()
+        let source = this.getPos()
+        let angle = source.angleTo(target)
+        this.setFacing(angle)
+    doAfter(time) ->
+        this
+            ..unpause()
+            ..setTimeScale(1)
+            ..addAbility(spellId)
+            ..issuePointOrder(order, this.getOwner().getMousePos())
+        doAfter(.5) ->
+            this.removeAbility(spellId)
+
+public function unit.castPoint(vec2 point, real time, string anim, integer spellId, string order, real speed)
+    this.pause()
+    this.setAnimation(anim)
+    this.setTimeScale(speed)
+    doAfter(time) ->
+        this
+            ..unpause()
+            ..setTimeScale(1)
+            ..addAbility(spellId)
+            ..issuePointOrder(order, point)
+        doAfter(.5) ->
+            this.removeAbility(spellId)
+
+public function unit.castNoTarget(real time, string anim, integer spellId, string order, real speed)
+    this.pause()
+    this.setAnimation(anim)
+    this.setTimeScale(speed)
+    doAfter(time) ->
+        this
+            ..unpause()
+            ..setTimeScale(1)
+            ..addAbility(spellId)
+            ..issueImmediateOrder(order)
+        doAfter(.5) ->
+            this.removeAbility(spellId)

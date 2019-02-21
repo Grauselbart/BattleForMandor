@@ -34,16 +34,16 @@ function reduceGlobalCooldownPercentRemaining(real percentage, unit u)
 
 // reduces the cooldown of a given ability based on a flat amount
 function reduceCooldown(real amount, unit u, int id)
-		real actual=BlzGetUnitAbilityCooldownRemaining(u, id)-amount
-		BlzSetUnitAbilityCooldown(u,id,1,actual)
-		
-		// ------------------------------------------
+    real actual=BlzGetUnitAbilityCooldownRemaining(u, id)-amount
+    BlzSetUnitAbilityCooldown(u,id,1,actual)
+    
+    // ------------------------------------------
 // Returns the maximum cooldown of a given ability
 function getCooldownMax(unit u, int id) returns real
-		real cooldown=BlzGetUnitAbilityCooldown(u, id, GetUnitAbilityLevel(u,id))
-		return cooldown
-			
+    real cooldown=BlzGetUnitAbilityCooldown(u, id, GetUnitAbilityLevel(u,id))
+    return cooldown
+        
 // Returns the remaining cooldown of a given ability
 function getCooldownRemaining(unit u, int id) returns real
-		real cooldown=BlzGetUnitAbilityCooldownRemaining(u, id)
-		return cooldown
+    real cooldown=BlzGetUnitAbilityCooldownRemaining(u, id)
+    return cooldown
