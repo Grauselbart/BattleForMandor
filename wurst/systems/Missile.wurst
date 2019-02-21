@@ -58,4 +58,132 @@ public trigger  misHitTrigger       = null
 public trigger  misPeriodicTrigger  = null
 public integer  misPeriodicInt      = 1*FPS
 
-// tbc
+// class definition
+public class Missile
+    use LinkedListModule
+    private static constant missileNodes = new HashMap <effect, Missile>()
+    private static let clock = CreateTimer()
+
+    // movement properties
+    private effect  projectile
+    private unit    source
+    private unit    target
+    private vec3    targetPos
+    private vec3    velocity
+    private vec3    acceleration
+    private real    range
+    private real    rangeMax
+    private angle   spin
+    private real    minZ
+    private angle   turnRate
+
+    // hit properties
+    private real    hitBox
+    private real    hitDamage
+    private string  hitFx
+    private string  hitFxAttach
+    private boolean hitTarget
+
+    // target conditions
+    private boolean lineAfterHit
+    private boolean hitEnemy
+    private boolean hitAlly
+    private boolean hitDestructable
+    private boolean hitMagicImmune
+
+    // end conditions
+    private boolean endOnHit
+    private boolean endOnTarget
+    private boolean endOnObstacle
+
+    // projectile advanced trigger
+    private trigger endTrigger
+    private trigger hitTrigger
+    private trigger periodicTrigger
+    private integer periodicIntervall
+    private integer periodicCounter
+
+    // other
+    private integer stopMissile
+    private group   hitGroup
+
+    static function clearVars()
+        misProjectile	= null
+        misSource		= null
+        misTarget		= null
+        misTargetPos	= vec3(0, 0, 0)
+        misMaxRange		= 0.
+        misSpeed		= 0.
+        misAccel		= 0.
+        misAngle		= angle(0)
+        misSpin			= angle(0)
+        misTurnRate		= 45..asAngleDegrees()
+        misArc			= angle(0)
+        misMinZ			= 50.
+        misHitBox		= 0.
+        misHitDamage	= 0.
+        misHitEffect	= ""
+        misHitAttatch	= "origin"
+        misDamageType		= DamageType.ATTACK
+        misLineAfterHit		= false
+        misHitEnemy			= true
+        misHitAlly			= false
+        misHitMagicImmune	= true
+        misHitDestructable	= true
+        misEndOnHit			= true
+        misEndOnTarget		= true
+        misEndOnObstacle	= false
+        misEndTrigger		= null 
+        misHitTrigger		= null
+        misPeriodicTrigger	= null
+        misPeriodicInt		= 1 * FPS
+
+    static function registerMissile()
+        // safety check for linked list (to prevent negative list size)
+        if size < 0
+            size = 0
+        
+        // get starting position and check if z is lower than zMin and adjust z if necessary
+        let startPosXY  = misProjectile.getPos()
+        var startPosZ   = misProjectile.getLocalZ()
+        if startPosZ <= misMinZ + startPosXY.getTerrainZ() // if z is lower than minimum z, set z to minimal allowed value
+            startPosZ = startPosXY.getTerrainZ() + misMinZ
+        let startPos = startPosXY.withZ(startPosZ)
+        
+        // get final destination of missile (via targeted unit or targeted point)
+        vec3 endPos
+        if misTarget != null
+            endPos = misTarget.getPos().withZ(misTarget.getPos().getTerrainZ() + misMinZ)
+        else
+            endPos = misTargetPos
+        
+        // calculate range of missile
+        let rangeXY = startPos.toVec2().distanceTo(endPos.toVec2())
+        let rangeZ  = endPos.z - startPos.z
+        
+        // calculate time of travel to reach target in xy plane (only important for z trajectory calculations)
+        real travelTime
+        if misAccel == 0.
+            travelTime = rangeXY/misSpeed
+        else if misAccel > 0
+            travelTime = (-misSpeed - SquareRoot(misSpeed*misSpeed+2*misAccel*rangeXY))/misAccel
+        else
+            travelTime = (-misSpeed + SquareRoot(misSpeed*misSpeed+2*misAccel*rangeXY))/misAccel
+
+        // define XY velocity and acceleration
+        let velocityXY  = ZERO2.polarOffset(misAngle, misSpeed)
+        let accelXY     = ZERO2.polarOffset(misAngle, misAccel)
+
+        // define Z velocity and acceleration
+        let velocityZ   = (misSpeed*Tan(misArc.radians()))+rangeZ
+        let gravity     = -2*(velocityZ*travelTime-rangeZ)/(travelTime*travelTime)
+
+        // merge calculated values in velocity and acceleration vector
+        let vel3 = velocityXY.withZ(velocityZ)*FRQ
+        let acc3 = (accelXY.withZ(gravity))*FRQ*FRQ
+
+        let spin        = misSpin*FRQ
+        let turnRate    = misTurnRate*FRQ
+
+            //// tbc
+        

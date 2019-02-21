@@ -6,9 +6,6 @@ import CombatText
 
 public player pCreeps = Player(PLAYER_NEUTRAL_AGGRESSIVE)
 
-public function effect.getPos() returns vec3
-	return vec3(this.getLocalX(), this.getLocalY(), this.getLocalZ())
-
 public function effect.setPos(vec3 pos)
 	this
 		..setX(pos.x)
