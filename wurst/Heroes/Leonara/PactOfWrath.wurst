@@ -1,0 +1,28 @@
+package PactOfWrath
+import Hero
+import ClosureTimers
+
+constant real PACTOFWRATH_DURATION=3.
+constant int PACTOFWRATH_ID='XXXX'
+
+public function getPactOfWrathStack(unit u)
+    real duration=PACTOFWRATH_DURATION
+    //check if unit is a PlayerHero and alter duration
+    PlayerHero check=getPlayerHero(u)
+    if check!=null
+        duration*=(1+check.getStat('CONC'))
+    //alter Ability
+    int level=GetUnitAbilityLevel(u, PACTOFWRATH_ID)
+    if level==0
+        UnitAddAbility(u, PACTOFWRATH_ID)
+    else
+        SetUnitAbilityLevel(u,PACTOFWRATH_ID, level+1)
+
+    doAfter(duration)->
+        level=GetUnitAbilityLevel(u, PACTOFWRATH_ID)
+        if level<=1
+            UnitRemoveAbility(u, PACTOFWRATH_ID)
+        else
+            SetUnitAbilityLevel(u,PACTOFWRATH_ID, level-1)
+            
+

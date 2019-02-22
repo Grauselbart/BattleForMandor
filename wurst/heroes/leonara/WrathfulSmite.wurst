@@ -2,13 +2,13 @@ package WrathfulSmite
 import Hero
 import LinkedList
 import Leonara_Data
+import PactOfWrath
 
 public LinkedList<WrathfulSmiteSpell> SPELL_INSTANCES_WRATHFULSMITE=new LinkedList<WrathfulSmiteSpell>()
 
 constant string WRATHFULSMITE_EFFECT="Abilities/Spells/Orc/SpiritLink/SpiritLinkTarget.mdl"
 constant string WRATHFULSMITE_EFFECT_ATTACH="weapon"
 constant real WRATHFULSMITE_BASE_DURATION=6.
-
 
 class WrathfulSmiteSpell
         unit caster
@@ -26,7 +26,7 @@ class WrathfulSmiteSpell
 
         construct(unit u)
                 caster=u
-                duration=6
+                duration=WRATHFULSMITE_BASE_DURATION
                 damage=calcDamage()
                 t=CreateTimer()
                 run()
@@ -87,6 +87,7 @@ public function checkWrathfulSmite(unit u) returns real
         WrathfulSmiteSpell check=unitInList(u)
         if check!=null
                 dmgAmp=check.getDamage()
+                getPactOfWrathStack(u)
                 destroy check
         return dmgAmp
 
@@ -98,7 +99,7 @@ function unitInList(unit u) returns WrathfulSmiteSpell
                 check=i.next()
                 if u==check.getCaster()
                         break
-        if check==null
+                check=null
         return check            
 
 // Check if the casting spell is Wrathful Smite

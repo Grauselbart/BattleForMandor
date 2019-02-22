@@ -65,10 +65,13 @@ public function getPlayerHero(unit u) returns PlayerHero
 	PlayerHero check=null
 	//checks the whole list if the given unit is a PlayerHero.
 	LLIterator<PlayerHero> i=PLAYER_HEROES.iterator()
+	
 	while i.hasNext()	
 		check=i.next()
 		if u==check.getHero()
 			break
+		check=null
+
 	if check==null
 		print("ERROR: '"+ u.getName() + "' is no PlayerHero!")
 	return check
