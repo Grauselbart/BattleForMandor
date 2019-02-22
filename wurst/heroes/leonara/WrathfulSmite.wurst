@@ -5,6 +5,11 @@ import Leonara_Data
 
 public LinkedList<WrathfulSmiteSpell> SPELL_INSTANCES_WRATHFULSMITE=new LinkedList<WrathfulSmiteSpell>()
 
+constant string WRATHFULSMITE_EFFECT="Abilities/Spells/Orc/SpiritLink/SpiritLinkTarget.mdl"
+constant string WRATHFULSMITE_EFFECT_ATTACH="weapon"
+constant real WRATHFULSMITE_BASE_DURATION=6.
+
+
 class WrathfulSmiteSpell
         unit caster
         real duration
@@ -14,7 +19,7 @@ class WrathfulSmiteSpell
 
         construct(PlayerHero h)
                 caster=h.getHero()
-                duration=6*(1 + h.getStat('CONC'))
+                duration=WRATHFULSMITE_BASE_DURATION*(1 + h.getStat('CONC'))
                 damage=calcDamage()
                 t=CreateTimer()
                 run()
@@ -52,11 +57,10 @@ class WrathfulSmiteSpell
         function run()
                 SPELL_INSTANCES_WRATHFULSMITE.add(this)
                 //Create a timer that destorys the spell after its duration
-                print("Spell instance created. Current instances: " + SPELL_INSTANCES_WRATHFULSMITE.size().toString())
                 TimerStart(t, duration, false, function endSpell)
+                this.e=this.caster.addEffect(WRATHFULSMITE_EFFECT, WRATHFULSMITE_EFFECT_ATTACH)
                 //Adds a buff !DOES NOT WORK!
-                this.e=this.caster.addEffect("Abilities/Spells/Orc/SpiritLink/SpiritLinkTarget.mdl", "weapon")
-                caster.addAbility(BUFF_ID_WRATHFULSMITE)
+                caster.addAbility(BUFF_ID_WRATHFULSMITE) 
         
         ondestroy
                 SPELL_INSTANCES_WRATHFULSMITE.remove(this)
@@ -65,7 +69,6 @@ class WrathfulSmiteSpell
                 //Removes the buff !DOES NOT WORK!
                 this.caster.removeAbility(BUFF_ID_WRATHFULSMITE)
                 this.caster=null
-                print("Spell instance removed. Current instances: " + SPELL_INSTANCES_WRATHFULSMITE.size().toString())
 
 //is getting the expired timer and removed the spell instance from the list and destorys if after that
 function endSpell() 
@@ -95,8 +98,7 @@ function unitInList(unit u) returns WrathfulSmiteSpell
                 check=i.next()
                 if u==check.getCaster()
                         break
-                if check==null
-                        print("'"+ u.getName() + "' is not in a Wrathful Smite instance!")
+        if check==null
         return check            
 
 // Check if the casting spell is Wrathful Smite
@@ -120,8 +122,7 @@ function initSpell()
                         else
                                 new WrathfulSmiteSpell(h)
         else
-                TimerStart(check.getTimer(),check.getDuration(),false,function endSpell)
-                print("Timer for Instance " + SPELL_INSTANCES_WRATHFULSMITE.indexOf(check).toString()+ " reseted to " + check.getDuration().toString() + " seconds.")
+                TimerStart(check.getTimer(),check.getDuration(),false,function endSpell) //Timer is getting a reset here
 
         
 //================TRIGGERCREATION===========================
@@ -129,5 +130,3 @@ let WS=CreateTrigger()
         ..addAction(function initSpell)
         ..registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
 //==========================================================
-
-

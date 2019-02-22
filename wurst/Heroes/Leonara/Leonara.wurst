@@ -4,7 +4,7 @@ import Hero
 import Leonara_Data
 
 
-class Leonara extends PlayerHero
+public class Leonara extends PlayerHero
 	construct(player owner, real posX, real posY, real angle)
 		super(owner, HERO_ID_LEONARA, posX, posY, angle)
 
@@ -26,20 +26,3 @@ class Leonara extends PlayerHero
 		PLAYER_HEROES.add(this)
 
 
-init
-	trigger tmp=CreateTrigger()
-	TriggerRegisterPlayerChatEvent(tmp, Player(0), "hi", false)
-	tmp.addAction(function setupUnit)
-
-	trigger cd=CreateTrigger()
-	TriggerRegisterPlayerChatEvent(cd, Player(0), "-", false)
-	cd.addAction(function cooldownreduction)
-	
-function setupUnit()
-	print("Create new Leonara")
-	new Leonara(Player(0),0,0,0)
-
-function cooldownreduction()
-	PLAYER_HEROES.get(0).getHero().setAbilityCooldown(idLeoQ, 1, PLAYER_HEROES.get(0).getHero().getAbilityCooldownRemaining(idLeoQ)-2) 
-	//sadly reduces only the "golbal" cooldown of that ability, not reducing the remaining cooldown
-	print("Cooldown reduced")

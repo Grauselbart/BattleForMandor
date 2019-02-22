@@ -1,0 +1,24 @@
+package Testing_Area
+import Leonara
+import Hero
+import Leonara_Data
+
+// For testing suff to keep the rest clean
+init
+	trigger tmp=CreateTrigger()
+	TriggerRegisterPlayerChatEvent(tmp, Player(0), "hi", false)
+	tmp.addAction(function setupUnit)
+
+	trigger cd=CreateTrigger()
+	TriggerRegisterPlayerChatEvent(cd, Player(0), "-", false)
+	cd.addAction(function cooldownreduction)
+	
+function setupUnit()
+	print("Create new Leonara")
+	new Leonara(Player(0),0,0,0)
+
+
+function cooldownreduction()
+	PLAYER_HEROES.get(0).getHero().setAbilityCooldown(idLeoQ, 1, PLAYER_HEROES.get(0).getHero().getAbilityCooldownRemaining(idLeoQ)-2) 
+	//sadly reduces only the "golbal" cooldown of that ability, not reducing the remaining cooldown
+	print("Cooldown reduced")
