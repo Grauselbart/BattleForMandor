@@ -9,12 +9,14 @@ class Leonara extends PlayerHero
 		super(owner, HERO_ID_LEONARA, posX, posY, angle)
 
 		print("Leonara was picked by " + GetPlayerName(owner))
+		
 		//Add abilities to leonara
 		UnitAddAbility(this.getHero(), idLeoP)
 		UnitAddAbility(this.getHero(), idLeoQ)
 		UnitAddAbility(this.getHero(), idLeoW)
 		UnitAddAbility(this.getHero(), idLeoE)
 		UnitAddAbility(this.getHero(), idLeoR)
+
 		//Set ability IDs to the PlayerHero for later interaction etc. (e.g.: steal enemies Q ability)
 		HERO_SPELL_P=idLeoP
 		HERO_SPELL_Q=idLeoQ
@@ -22,6 +24,7 @@ class Leonara extends PlayerHero
 		HERO_SPELL_E=idLeoE
 		HERO_SPELL_R=idLeoR
 		PLAYER_HEROES.add(this)
+
 
 init
 	trigger tmp=CreateTrigger()
@@ -31,11 +34,12 @@ init
 	trigger cd=CreateTrigger()
 	TriggerRegisterPlayerChatEvent(cd, Player(0), "-", false)
 	cd.addAction(function cooldownreduction)
-
+	
 function setupUnit()
-	print("Test")
+	print("Create new Leonara")
 	new Leonara(Player(0),0,0,0)
 
 function cooldownreduction()
-	PLAYER_HEROES.get(0).getHero().setAbilityCooldown(idLeoQ, 1, PLAYER_HEROES.get(0).getHero().getAbilityCooldownRemaining(idLeoQ)-2) //sadly reduces only the "golbal" cooldown of that ability, not reducing the remaining cooldown
+	PLAYER_HEROES.get(0).getHero().setAbilityCooldown(idLeoQ, 1, PLAYER_HEROES.get(0).getHero().getAbilityCooldownRemaining(idLeoQ)-2) 
+	//sadly reduces only the "golbal" cooldown of that ability, not reducing the remaining cooldown
 	print("Cooldown reduced")

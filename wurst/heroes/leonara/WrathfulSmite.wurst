@@ -10,7 +10,7 @@ class WrathfulSmiteSpell
         real duration
         real damage
         timer t
-        effect e
+        effect e=null
 
         construct(PlayerHero h)
                 caster=h.getHero()
@@ -25,19 +25,27 @@ class WrathfulSmiteSpell
                 damage=calcDamage()
                 t=CreateTimer()
                 run()
+
+        function getDamage() returns real
+                return this.damage
+
+        function getDuration() returns real
+                return this.duration
+
+        function getCaster() returns unit
+                return this.caster
         
         function getTimer() returns timer
-                return t
+                return this.t
 
         function calcDamage() returns real
-                int rolls=caster.getDiceNumber(0)       // Number of damage dice
-                int sides=caster.getDiceSides(0)        // type of dice, number of sides of each dice
-                int flat=caster.getBaseDamage(0)        // flat damage of unit, without any dice
+                int rolls=caster.getDiceNumber(1)       // Number of damage dice
+                int sides=caster.getDiceSides(1)        // type of dice, number of sides of each dice
+                int flat=caster.getBaseDamage(1)        // flat damage of unit, without any dice
                 real amount=0
                 // simulates the dice rolls and add them together. number of rolls = number of dices
                 for int j=0 to rolls
                         amount+=GetRandomInt(1, sides)
-
                 amount+=flat    // adds the flat damage to the random amount
                 return amount
 
@@ -47,49 +55,79 @@ class WrathfulSmiteSpell
                 print("Spell instance created. Current instances: " + SPELL_INSTANCES_WRATHFULSMITE.size().toString())
                 TimerStart(t, duration, false, function endSpell)
                 //Adds a buff !DOES NOT WORK!
+                this.e=this.caster.addEffect("Abilities/Spells/Orc/SpiritLink/SpiritLinkTarget.mdl", "weapon")
                 caster.addAbility(BUFF_ID_WRATHFULSMITE)
         
         ondestroy
-                DestroyTimer(t)
+                SPELL_INSTANCES_WRATHFULSMITE.remove(this)
+                DestroyEffect(e)
+                DestroyTimer(this.t)
                 //Removes the buff !DOES NOT WORK!
-                caster.removeAbility(BUFF_ID_WRATHFULSMITE)
-                caster=null
+                this.caster.removeAbility(BUFF_ID_WRATHFULSMITE)
+                this.caster=null
                 print("Spell instance removed. Current instances: " + SPELL_INSTANCES_WRATHFULSMITE.size().toString())
 
-function endSpell() //is getting the expired timer and removed the spell instance from the list and destorys if after that
+//is getting the expired timer and removed the spell instance from the list and destorys if after that
+function endSpell() 
         timer t=GetExpiredTimer()
         LLIterator<WrathfulSmiteSpell> i=SPELL_INSTANCES_WRATHFULSMITE.iterator()
+        WrathfulSmiteSpell check
         while i.hasNext()
-                let actual=i.next()
-                if t==actual.getTimer()
-                        SPELL_INSTANCES_WRATHFULSMITE.remove(actual)
-                        destroy actual 
-        DestroyTimer(t)
-                
-
-
-
-
+                check=i.next()
+                if t==check.getTimer()
+                        destroy check
+                        break
         
-                
+//function for the DamageType2 Package, to get the damage amp if it als an instance of this spell
+public function checkWrathfulSmite(unit u) returns real
+        real dmgAmp=0.
+        WrathfulSmiteSpell check=unitInList(u)
+        if check!=null
+                dmgAmp=check.getDamage()
+                destroy check
+        return dmgAmp
 
-let WS=CreateTrigger()
-        ..addAction(function initSpell)
-        ..registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
+// if the unit is in an instance of this spell, it returns that instance, else it returns null
+function unitInList(unit u) returns WrathfulSmiteSpell
+        WrathfulSmiteSpell check=null
+        LLIterator<WrathfulSmiteSpell> i=SPELL_INSTANCES_WRATHFULSMITE.iterator()
+        while i.hasNext()	
+                check=i.next()
+                if u==check.getCaster()
+                        break
+                if check==null
+                        print("'"+ u.getName() + "' is not in a Wrathful Smite instance!")
+        return check            
 
+// Check if the casting spell is Wrathful Smite
 function thisSpell() returns boolean
         return GetSpellAbilityId()==idLeoQ
 
-function initSpell()
-        if thisSpell()
-                unit u=GetTriggerUnit()
-                PlayerHero h=getPlayerHero(u)
-                //depending on if the unit is a PlayerHero or not, the new spell instance is created
-                if h==null
-                        new WrathfulSmiteSpell(u)
-                else
-                        new WrathfulSmiteSpell(h)
-        
+/*Create a spell instance depending on: 1. if there is an instance for this unit already -> resets the duration
+                                        2. if the unit is a PlayerHero or not -> uses different constructors (especially for the duration due to the HERO_STAT_CONCENTRATION)
+*/
 
+function initSpell()
+        unit u=GetTriggerUnit()
+        WrathfulSmiteSpell check
+        check=unitInList(u)
+        if check==null //Checks if there is already a instance of this spell for the casting unit and only resets the timer if it isnt null (see 'else')
+                if thisSpell() //checks if the unit is a PlayerHero or a simple unit
+                        PlayerHero h=getPlayerHero(u)
+                   //depending on if the unit is a PlayerHero or not, the new spell instance is created
+                        if h==null
+                                new WrathfulSmiteSpell(u)
+                        else
+                                new WrathfulSmiteSpell(h)
+        else
+                TimerStart(check.getTimer(),check.getDuration(),false,function endSpell)
+                print("Timer for Instance " + SPELL_INSTANCES_WRATHFULSMITE.indexOf(check).toString()+ " reseted to " + check.getDuration().toString() + " seconds.")
+
+        
+//================TRIGGERCREATION===========================
+let WS=CreateTrigger()
+        ..addAction(function initSpell)
+        ..registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)
+//==========================================================
 
 

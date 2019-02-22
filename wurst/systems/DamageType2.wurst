@@ -5,6 +5,7 @@ package DamageType2
 // and basic attacks.
 import DamageDetection
 import CombatText
+import WrathfulSmite
 
 class DelayDat
     unit target
@@ -86,6 +87,10 @@ function handler() returns bool
     //Hier Damage Modification reinmachen
     var dmgModRel = 0.
     var dmgModAbs = 0.
+    /*===============Leonara Q================*/
+    if dT==DamageType.INGAME
+        dmgModAbs+=checkWrathfulSmite(uS)
+    /*========================================*/
     
     var dmgEnd = dmg * (1+dmgModRel) + dmgModAbs
     // Set dealt damage
