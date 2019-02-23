@@ -1,0 +1,80 @@
+package Archer
+
+import DamageDetection
+import DamageType2
+import Missile
+import Assets
+import UnitObjEditing
+import ObjectIdGenerator
+
+public let archerId = compiletime(UNIT_ID_GEN.next())
+
+let PROJECTILE_ART = Abilities.arrowMissile1
+let PROJECTILE_SPEED = 900.
+let PROJECTILE_RANGE = 900.
+let PROJECTILE_ARC = (20).asAngleDegrees()
+let PROJECTILE_LAUNCH_Z = 65.
+let PROJECTILE_LAUNCH_ROTATION = (0.).asAngleDegrees()
+let PROJECTILE_LAUNCH_OFFSET = 10.
+let PROJECTILE_HITBOX = 100.
+
+init
+	addOnDamageFunc(Condition(() -> begin
+		let uS = GetEventDamageSource()
+		if uS.getTypeId() == archerId and getDamageType() == DamageType.INGAME
+			let uT = GetTriggerUnit()
+			let sPos = uS.getPos()
+			let startXY = sPos + ZERO2.polarOffset(uS.getFacingAngle() + PROJECTILE_LAUNCH_ROTATION, PROJECTILE_LAUNCH_OFFSET)
+			let startZ = sPos.getTerrainZ() + PROJECTILE_LAUNCH_Z
+			
+			//Calculate damage
+			let basedmg = BlzGetUnitBaseDamage(uS, 1)
+			let n = BlzGetUnitDiceNumber(uS, 1)
+			var roll = 0
+			for i = 1 to n
+				roll += GetRandomInt(1, BlzGetUnitDiceSides(uS, 1))
+			
+			//Create projectile
+			misProjectile =	addEffect(PROJECTILE_ART, startXY)..setZ(startZ)
+			misSource = uS
+			misTargetPos = uT.getPos3Real()
+			misSpeed = PROJECTILE_SPEED
+			misAngle = startXY.angleTo(uT.getPos())
+			misArc = PROJECTILE_ARC
+			misMaxRange = PROJECTILE_RANGE
+			misHitBox = PROJECTILE_HITBOX
+			misDamageType = DamageType.ATTACK
+			misHitDamage = I2R(basedmg + roll)
+			Missile.registerMissile()
+	end))
+
+//OBJECT DATA
+@compiletime function obj()
+	new UnitDefinition(archerId, 'nska')
+		//Base
+		..setName("Archer")
+		..setGoldBountyAwardedBase(0)
+		..setGoldBountyAwardedNumberofDice(0)
+		..setGoldBountyAwardedSidesperDie(0)
+		..setCanFlee(false)
+		..setModelFile(Units.archer)
+		//HP and Mana
+		..setHitPointsMaximumBase(500)
+		..setHitPointsRegenerationRate(5)
+		..setHitPointsRegenerationType("always")
+		..setManaMaximum(100)
+		..setManaInitialAmount(100)
+		..setManaRegeneration(1)
+		//Attack
+		..setAttack1CooldownTime(3.)
+		..setAttack1AttackType(AttackType.Normal)
+		..setAcquisitionRange(600)
+		..setAttack1Range(600)
+		..setAttack1DamageBase(30)
+		..setAttack1DamageNumberofDice(1)
+		..setAttack1DamageSidesperDie(50)
+		..setAttack1ProjectileArt("none")
+		..setAttack1WeaponType(WeaponType.Instant)
+		//Armor
+		..setArmorType(ArmorType.Normal)
+		..setDefenseBase(0)
