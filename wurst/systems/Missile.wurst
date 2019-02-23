@@ -14,12 +14,14 @@ constant integer FPS = 30
 constant real FRQ = 1./FPS
 
 // variables that carry over to missile event triggers
-public effect   misTrigProjectile = null
-public unit     misTrigSource     = null
-public unit     misTrigTarget     = null
-public vec3     misTrigTargetPos  = vec3(0, 0, 0)
-public unit     misTrigHitUnit    = null
-public boolean  misTrigEndonUnit  = false
+public effect       misTrigProjectile = null
+public unit         misTrigSource     = null
+public unit         misTrigTarget     = null
+public vec3         misTrigTargetPos  = vec3(0, 0, 0)
+public unit         misTrigHitUnit    = null
+public boolean      misTrigEndonUnit  = false
+public real         misTrigDamage     = 0.
+public DamageType   misTrigDamageType = DamageType.ATTACK
 
 // projectile trajectory
 public effect   misProjectile   = null
@@ -78,11 +80,12 @@ public class Missile
     private angle   turnRate
 
     // hit properties
-    private real    hitBox
-    private real    hitDamage
-    private string  hitFx
-    private string  hitFxAttach
-    private boolean hitTarget
+    private real        hitBox
+    private real        hitDamage
+    private DamageType  dmgType
+    private string      hitFx
+    private string      hitFxAttach
+    private boolean     hitTarget
 
     // target conditions
     private boolean lineAfterHit
@@ -185,5 +188,237 @@ public class Missile
         let spin        = misSpin*FRQ
         let turnRate    = misTurnRate*FRQ
 
-            //// tbc
-        
+        // if missile is already registered, change its values
+        if missileNodes.has(misProjectile)
+            missileNodes.get(misProjectile).source              = misSource
+            missileNodes.get(misProjectile).target              = misTarget
+            missileNodes.get(misProjectile).targetPos           = misTargetPos
+            missileNodes.get(misProjectile).velocity            = vel3
+            missileNodes.get(misProjectile).acceleration        = acc3
+            missileNodes.get(misProjectile).turnRate            = turnRate
+            missileNodes.get(misProjectile).range               = rangeXY
+            missileNodes.get(misProjectile).rangeMax            = misMaxRange
+            missileNodes.get(misProjectile).spin                = spin
+            missileNodes.get(misProjectile).minZ                = misMinZ
+            missileNodes.get(misProjectile).hitBox              = misHitBox
+            missileNodes.get(misProjectile).hitDamage           = misHitDamage
+            missileNodes.get(misProjectile).hitFx               = misHitEffect
+            missileNodes.get(misProjectile).hitFxAttach         = misHitAttatch
+            missileNodes.get(misProjectile).hitTarget           = false
+            missileNodes.get(misProjectile).dmgType             = misDamageType
+            missileNodes.get(misProjectile).endOnHit            = misEndOnHit
+            missileNodes.get(misProjectile).endOnTarget         = misEndOnTarget
+            missileNodes.get(misProjectile).endOnObstacle       = misEndOnObstacle
+            missileNodes.get(misProjectile).endTrigger          = misEndTrigger
+            missileNodes.get(misProjectile).hitTrigger          = misHitTrigger
+            missileNodes.get(misProjectile).periodicTrigger     = misPeriodicTrigger
+            missileNodes.get(misProjectile).periodicIntervall   = misPeriodicInt
+            missileNodes.get(misProjectile).periodicCounter     = 0
+            missileNodes.get(misProjectile).hitGroup            = CreateGroup()
+        else
+        // if missile is new, register it and add its values
+            let missile = new Missile()
+            missileNodes.put(misProjectile, missile)
+            missile.projectile 		= misProjectile
+            missile.source          = misSource
+            missile.target          = misTarget
+            missile.targetPos       = misTargetPos
+            missile.velocity        = vel3
+            missile.acceleration    = acc3
+            missile.turnRate        = turnRate
+            missile.range           = rangeXY
+            missile.rangeMax        = misMaxRange
+            missile.spin            = spin
+            missile.minZ            = misMinZ
+            missile.hitBox          = misHitBox
+            missile.hitDamage       = misHitDamage
+            missile.hitFx           = misHitEffect
+            missile.hitFxAttach     = misHitAttatch
+            missile.hitTarget       = false
+            missile.hitDestructable = misHitDestructable
+            missile.dmgType         = misDamageType
+            missile.endOnHit        = misEndOnHit
+            missile.endOnTarget     = misEndOnTarget
+            missile.endOnObstacle   = misEndOnObstacle
+            missile.endTrigger      = misEndTrigger
+            missile.hitTrigger      = misHitTrigger
+            missile.periodicTrigger = misPeriodicTrigger
+            missile.periodicIntervall = misPeriodicInt
+            missile.periodicCounter = 0
+            missile.hitGroup        = CreateGroup()
+            missile.stopMissile     = 0
+        // if there are no registered missiles before, start system
+        if size == 1
+            clock.startPeriodic(FRQ, function tick)
+        // if the missile has no valid projectile, remove it
+        if missileNodes.has(misProjectile) == false
+            misProjectile.destr()
+        // reset all variables for next missile registration
+        clearVars()
+
+    private static function endMissile(Missile missile)
+        if missile.endTrigger != null
+            misTrigProjectile   = missile.projectile
+            misTrigSource       = missile.source
+            misTrigTarget       = missile.target
+            misTrigTargetPos    = missile.targetPos
+            misTrigDamage       = missile.hitDamage
+            misTrigDamageType   = missile.dmgType
+            TriggerExecute(missile.endTrigger)
+            misTrigProjectile   = null
+            misTrigSource       = null
+            misTrigTarget       = null
+            misTrigTargetPos    = ZERO3
+            misTrigDamage       = 0.
+            misTrigDamageType   = DamageType.ATTACK
+
+        missile.hitGroup.destr()
+        missileNodes.remove(missile.projectile)
+        missile.projectile.destr()
+
+    private static function checkUnitHit(Missile missile, vec3 pos3)
+        forUnitsInRange(pos3.toVec2(), missile.hitBox) u ->
+            if u.getLife() > 0.5
+                // check if any hit condition applies to enum unit
+                var valid = false
+                if misHitAlly and u.getOwner().isAllyOf(missile.source.getOwner()) and u != missile.source
+                    valid = true
+                if misHitEnemy and u.getOwner().isEnemyOf(missile.source.getOwner())
+                    valid = true
+                if misHitMagicImmune == false and u.isType(UNIT_TYPE_MAGIC_IMMUNE) and valid
+                    valid = false
+                if valid
+                    let uXY = u.getPos()
+                    let uZ  = uXY.getTerrainZ() + u.getCollisionSize() + u.getFlyHeight()
+                    let hitBox = missile.hitBox
+                    // check if unit is in hitbox (3D)
+                    if (pos3.z - uZ).abs() <= hitBox and not missile.hitGroup.contains(u)
+                        missile.hitGroup.addUnit(u)
+                        missile.source.dealDamage(u, missile.hitDamage, missile.dmgType)
+                        AddSpecialEffectTarget(missile.hitFx, u, missile.hitFxAttach)
+                            ..destr()
+                        misTrigProjectile   = missile.projectile
+                        misTrigSource       = missile.source
+                        misTrigTarget       = missile.target
+                        misTrigTargetPos    = missile.targetPos
+                        misTrigDamage       = missile.hitDamage
+                        misTrigDamageType   = missile.dmgType
+                        TriggerExecute(missile.hitTrigger)
+                        misTrigProjectile   = null
+                        misTrigSource       = null
+                        misTrigTarget       = null
+                        misTrigTargetPos    = ZERO3
+                        misTrigDamage       = 0.
+                        misTrigDamageType   = DamageType.ATTACK
+                        if missile.endOnHit
+                            missile.stopMissile += 1
+                        else if missile.endOnTarget and u == missile.target
+                            missile.stopMissile += 1
+
+    static real desEnumSize = 200.
+    private static let destructableRect = Rect(-1*desEnumSize, -1*desEnumSize, desEnumSize, desEnumSize)
+
+    private static function checkDestHit(Missile missile, vec3 pos)
+        MoveRectTo(destructableRect, pos.x, pos.y)
+        forDestructablesInRect(destructableRect) des ->
+            let dXY = des.getPos()
+            let dZ = dXY.getTerrainZ()
+            let hb = missile.hitBox
+            if (pos.z - dZ).abs() <= hb and (dXY - pos.toVec2()).length() <= hb and des.getLife() > 0 and des.treeCheck()
+                des.setLife(des.getLife() - missile.hitDamage)
+                des.damageText(missile.hitDamage, missile.source.getOwner())
+                if missile.endOnHit
+                    missile.stopMissile += 1
+
+    private static function tick()
+        for missile from staticItr()
+            // position & speed
+            let pos3 = missile.projectile.getPos3()
+            let spd3 = missile.velocity
+            let acc3 = missile.acceleration
+            let spin = missile.spin
+            let pos3New = pos3 + spd3
+            var spd3New = spd3 + acc3
+
+            // if spin is larger than 0, turn the projectile
+            if spin.radians() != angle(0).radians()
+                spd3New = spd3New.rotate(vec3(0, 0, 1), spin)
+            // if projectile has a unit target, change angle to follow unit
+            if missile.target != null and missile.hitTarget == false 
+                // calculate angle to target and the corresponding rotation
+                let targetPos = missile.target.getPos()
+                let angleToTarget = pos3New.toVec2().angleTo(targetPos)
+                let angleOfSpeed = spd3New.toVec2().getAngle()
+                var rotation = angleToTarget.op_minus(angleOfSpeed)
+                spd3New = spd3New.rotate(vec3(0,0,1), rotation.radians())
+            
+            // change horizontal facing of projetile to new direction
+            let facingH = spd3.toVec2().getAngle().radians
+            var facingV = Atan(spd3.z / spd3.toVec2().length())
+            //if facingH >= -PIHALF and facingH <= PIHALF
+            //todo: max rotation per tick
+
+            // move projectile
+            missile.projectile
+                ..setPos(pos3New)
+                ..setRoll(facingH)
+
+            // stuff for vertical angle
+            if facingH >= -PI/4 and facingH <= PI/4
+                missile.projectile.setPitch(-facingV)
+            else if facingH >= PI/4 and facingH <= PI*3/4
+                missile.projectile.setYaw(facingV)
+            else if facingH >= -PI*3/4 and facingH <= -PI/4
+                missile.projectile.setYaw(-facingV)
+            else
+                missile.projectile.setPitch(facingV)
+
+            // refresh speed and remaining range
+            missile.velocity = spd3New
+            missile.rangeMax -= spd3.toVec2().length()
+            if spd3New.toVec2().length() <= 0.
+                missile.stopMissile += 1
+
+            // check for periodic function
+            missile.periodicCounter += 1
+            if missile.periodicCounter >= missile.periodicIntervall
+                missile.periodicCounter = 0
+                misTrigProjectile   = missile.projectile
+                misTrigSource       = missile.source
+                misTrigTarget       = missile.target
+                misTrigTargetPos    = missile.targetPos
+                misTrigDamage       = missile.hitDamage
+                misTrigDamageType   = missile.dmgType
+                TriggerExecute(missile.periodicTrigger)
+                misTrigProjectile   = null
+                misTrigSource       = null
+                misTrigTarget       = null
+                misTrigTargetPos    = ZERO3
+                misTrigDamage       = 0.
+                misTrigDamageType   = DamageType.ATTACK
+
+            // check if target was hit (widget)
+            if missile.lineAfterHit == true and missile.hitTarget == false
+                missile.hitTarget = missile.target.getPos().inRange(pos3.toVec2(), missile.hitBox)
+
+            misTrigEndonUnit = false
+            // check if missile hits unit
+            if missile.hitBox > 0.
+                checkUnitHit(missile, pos3)
+
+            // check if missile hits destructible
+            if missile.hitDestructable
+                checkDestHit(missile, pos3)
+            
+            // check if range is reached
+            if missile.rangeMax <= 0.
+                missile.stopMissile += 1
+            // check if missile hits terrain
+            if missile.projectile.getLocalZ() < pos3.toVec2().getTerrainZ()
+                missile.stopMissile += 1
+            
+            if missile.stopMissile > 0
+                endMissile(missile)
+                missile.remove()
+        if size == 0
+            clock.pause()

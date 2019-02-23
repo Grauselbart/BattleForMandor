@@ -6,11 +6,11 @@ import CombatText
 
 public player pCreeps = Player(PLAYER_NEUTRAL_AGGRESSIVE)
 
-public function effect.setPos(vec3 pos)
-	this
-		..setX(pos.x)
-		..setY(pos.y)
-		..setZ(pos.z)
+// public function effect.setPos(vec3 pos)
+// 	this
+// 		..setX(pos.x)
+// 		..setY(pos.y)
+// 		..setZ(pos.z)
 
 public function effect.setPosRelative(vec3 pos)
 	this
