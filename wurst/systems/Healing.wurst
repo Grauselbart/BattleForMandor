@@ -1,15 +1,35 @@
 package Healing
-
 import CombatText
+import LinkedList
+import Hero
+import ClosureTimers
 
 public function unit.healUnit(unit target, real amount, boolean showTxt)
 	var healModRel = 0.
 	var healModAbs = 0.
 	//Modification
-
+	PlayerHero ph=getPlayerHero(target)
+	if ph!=null
+		healModRel=amount*(1+ph.getStat(HeroStat.HealingPower))
+		
 	//Give healing
 	let healing = amount *(1+ healModRel) + healModAbs
 	target.addHP(healing)
 	if showTxt
 		//Create floating text
 		target.healText(healing, this.getOwner())
+
+init
+	doPeriodically(1) cb ->
+		LLIterator<PlayerHero> i=PLAYER_HEROES.iterator()
+		PlayerHero ph
+		real amp
+		unit u
+		while i.hasNext()
+			ph=i.next()
+			u=ph.getHero()
+			amp=ph.getStat(HeroStat.HpReg)
+			amp*=(1+ph.getStat(HeroStat.HealingPower))
+			u.healUnit(u, amp, false)
+			amp=ph.getStat(HeroStat.MpReg)
+			u.addMana(amp)

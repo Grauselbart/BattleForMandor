@@ -1,7 +1,6 @@
 package Hero
 import LinkedList
 import ClosureTimers
-import Healing
 
 public LinkedList<PlayerHero> PLAYER_HEROES = new LinkedList<PlayerHero>
 
@@ -38,8 +37,8 @@ public abstract class PlayerHero
 	
 	// stats missing?
 
-	construct(player owner, int unitId, real posX, real posY, real angle)
-		HERO_UNIT=createUnit(owner, unitId, vec2(posX,posY), angle(angle))
+	construct(player owner, int unitId, vec2 pos,angle facing)
+		HERO_UNIT=createUnit(owner, unitId, pos, facing)
 
 	//returns the hero unit
 	function getHero() returns unit
@@ -87,18 +86,5 @@ public function getPlayerHero(unit u) returns PlayerHero
 	if check==null
 		print("ERROR: '"+ u.getName() + "' is no PlayerHero!")
 	return check
-
-init
-	doPeriodically(1) cb ->
-		LLIterator<PlayerHero> i=PLAYER_HEROES.iterator()
-		PlayerHero ph=null
-		real baseHP=0.
-		real amp=0.
-		while i.hasNext()
-			ph=i.next()
-			baseHP=ph.getHero().getHP()	
-			amp=ph.getStat(HeroStat.HpReg)
-			amp*=(1+ph.getStat(HeroStat.HealingPower))
-			ph.getHero().healUnit(ph.getHero(),baseHP+amp,false)
 
 
