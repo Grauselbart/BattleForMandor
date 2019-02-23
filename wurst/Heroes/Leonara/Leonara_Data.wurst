@@ -5,6 +5,7 @@ import Icons
 import UnitIds
 import BuffObjEditing
 
+public let HERO_ID_LEONARA=compiletime(HERO_ID_GEN.next())
 public let LEONARA_SPELL_ID_P=compiletime(ABIL_ID_GEN.next())
 public let LEONARA_SPELL_ID_Q=compiletime(ABIL_ID_GEN.next())
 public let LEONARA_SPELL_ID_W=compiletime(ABIL_ID_GEN.next())
@@ -21,11 +22,12 @@ public let LEONARA_SPELL_ID_P_PSEUDO=compiletime(ABIL_ID_GEN.next())
 		..presetDamageTakenIncrease(lvl -> 0)
 		..presetTooltipNormalExtended(lvl -> "Enhances the next basic attack, dealing additional damage.")
 		..presetCooldown(lvl -> 1)
-		..setManaCost(1,50)
+		..setManaCost(1,20)
 		..setLevels(1)
 		..setHotkeyNormal("Q")
 		..presetButtonPosNormal(0, 2)
 		..presetIcon(Icons.bTNDivineShieldOff)
+		..presetDurationHero(lvl -> 0.01)
 
 
 @compiletime function createAbilityLeoW()
@@ -81,10 +83,10 @@ public let LEONARA_SPELL_ID_P_PSEUDO=compiletime(ABIL_ID_GEN.next())
 		
 @compiletime function createAbilityLeoP()
 	new AbilityDefinitionAttackSpeedIncrease(LEONARA_SPELL_ID_P)
-		..setLevels(100)
-		..presetAttackSpeedIncrease(lvl -> 0.1 * lvl)
+		..setLevels(10)
+		..presetAttackSpeedIncrease(lvl -> 0.3 * lvl)
 
-public let HERO_ID_LEONARA=compiletime(HERO_ID_GEN.next())
+
 @compiletime function createHero()
 	new HeroDefinition(HERO_ID_LEONARA, UnitIds.paladin)
 		..setProperNames("Leonara")
