@@ -1,0 +1,83 @@
+package Shield
+import LinkedList
+import ClosureTimers
+
+LinkedList<Shield> shields = new LinkedList<Shield>
+
+public class Shield
+    unit u
+    real duration
+    real currentAmount
+    real maxAmount
+
+    construct(unit u, real amount, real duration)
+        this.u=u
+        this.duration=duration
+        this.maxAmount=amount
+        this.currentAmount=amount
+
+        //set max hp
+        real actual=GetUnitState(this.u, UNIT_STATE_MAX_LIFE)
+        this.u.setMaxHP(actual.toInt() + this.maxAmount.toInt())
+
+        //set actual hp
+        actual=GetUnitState(this.u, UNIT_STATE_LIFE)
+        this.u.setHP(actual+this.maxAmount)
+
+        //Add to shields
+        shields.add(this)
+
+        doAfter(duration) ->
+            destroy this
+
+    ondestroy
+        //set actual hp
+        real actual=GetUnitState(u, UNIT_STATE_LIFE)
+        u.setHP(actual - currentAmount)
+        
+        //set max hp
+        actual=GetUnitState(u, UNIT_STATE_MAX_LIFE)
+        u.setMaxHP(actual.toInt() - maxAmount.toInt())
+
+        shields.remove(this)
+
+    function getUnit() returns unit
+        return this.u
+
+    function getCurrentAmount() returns real
+        return this.currentAmount
+    
+    function reduceCurrentAmount(real dmg)
+        this.currentAmount-=dmg
+
+
+
+function unitInList(unit uT) returns Shield
+    Shield check=null
+    LLIterator<Shield> i=shields.iterator()
+    while i.hasNext()
+        check=i.next()
+        if check.getUnit()==uT
+            break
+        else
+            check=null
+    return check
+
+public function checkShield(unit uT, real dmgEnd)
+  
+    if shields.isEmpty()==false
+        Shield check=unitInList(uT)
+        if check!=null
+            real dmg=dmgEnd
+            if check.getCurrentAmount()>=dmg
+                check.reduceCurrentAmount(dmg)
+            else
+                dmg-=check.getCurrentAmount()
+                destroy check
+                checkShield(uT,dmg)
+
+
+        
+
+
+

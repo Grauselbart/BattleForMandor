@@ -6,6 +6,7 @@ package DamageType2
 import DamageDetection
 import CombatText
 import WrathfulSmite
+import Shield
 
 class DelayDat
     unit target
@@ -98,6 +99,7 @@ function handler() returns bool
         BlzSetEventDamage(0.)
         dmgEnd = 0
     else
+        checkShield(uT,dmgEnd)
         BlzSetEventDamage(dmgEnd)
     
     // DamageNumbers

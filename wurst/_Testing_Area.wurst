@@ -2,6 +2,7 @@ package _Testing_Area
 import Leonara
 import Hero
 import Leonara_Data
+import Shield
 
 // For testing suff to keep the rest clean
 init
@@ -12,6 +13,10 @@ init
 	trigger cd=CreateTrigger()
 	TriggerRegisterPlayerChatEvent(cd, Player(0), "-", false)
 	cd.addAction(function cooldownreduction)
+
+	trigger hp=CreateTrigger()
+	TriggerRegisterPlayerChatEvent(hp, Player(0), "+", false)
+	hp.addAction(function createShield)
 	
 function setupUnit()
 	print("Create new Leonara")
@@ -22,3 +27,7 @@ function cooldownreduction()
 	PLAYER_HEROES.get(0).getHero().setAbilityCooldown(idLeoQ, 1, PLAYER_HEROES.get(0).getHero().getAbilityCooldownRemaining(idLeoQ)-2) 
 	//sadly reduces only the "golbal" cooldown of that ability, not reducing the remaining cooldown
 	print("Cooldown reduced")
+
+
+function createShield() 
+	new Shield(PLAYER_HEROES.get(0).getHero(), 300, 5)
