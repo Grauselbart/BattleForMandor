@@ -64,13 +64,17 @@ function unitInList(unit uT) returns Shield
     return check
 
 public function checkShield(unit uT, real dmgEnd)
-  
+    // check if instances of shields exist
     if shields.isEmpty()==false
-        Shield check=unitInList(uT)
-        if check!=null
+        //check if the damaged unit has a shield; 'is part of a shield instance'
+        Shield check=unitInList(uT) //getting the longest already active shield on the unit, if any, due to the list iteration.
+        if check!=null  
             real dmg=dmgEnd
+            // if the damage is lower or equal to the amount of the shield, reduce it by that amount
             if check.getCurrentAmount()>=dmg
                 check.reduceCurrentAmount(dmg)
+            //  destroy the shield, reduce the damage and search for another shield instance with that unit and repeat this function 
+            //  until there is no shield left for this unit or until all damage is absorbed.
             else
                 dmg-=check.getCurrentAmount()
                 destroy check
