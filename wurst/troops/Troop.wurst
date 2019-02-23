@@ -69,7 +69,6 @@ public class TroopDefinition extends HeroDefinition
 		setDefenseBase(0)
 
 public enum TroopStat
-	HpReg
 	MpReg
 	CritChance
 	CritDmg
@@ -88,7 +87,6 @@ public abstract class Troop
 	int TROOP_SPELL_ACTIVE
 
 	// Additional Stats								// DESCRIPTION
-	real 	TROOP_STAT_HPREG=0.						// hit point regeneration per second
 	real 	TROOP_STAT_MANAREG=0.					// mana regeneration per second
 	real 	TROOP_STAT_CRITCHANCE=0.				// chance to crit
 	real 	TROOP_STAT_CRITDAMAGE=2.				// increased crit damage, standard is 200%
@@ -107,8 +105,6 @@ public abstract class Troop
 	function getStat(TroopStat name) returns real
 		real r
 		switch(name)
-			case HpReg
-				r = TROOP_STAT_HPREG
 			case MpReg
 				r = TROOP_STAT_MANAREG
 			case CritChance
@@ -125,13 +121,3 @@ public abstract class Troop
 				r = 0.
 				print("ERROR: Troop stat not found!")
 		return r
-	
-init
-	doPeriodically(1) cb ->
-		LLIterator<Troop> i = TROOP_UNITS.iterator()
-		Troop trp = null
-		while i.hasNext()
-			trp = i.next()
-			let baseHP = trp.getTroop().getHP()
-			let reg = trp.getStat(TroopStat.HpReg)
-			trp.getTroop().healUnit(trp.getTroop(), reg, false)
