@@ -1,9 +1,7 @@
 package Troop
 
 import UnitObjEditing
-import ClosureTimers
 import LinkedList
-import Healing
 
 public integer 	BASE_SPEED 		= 290
 public integer 	SIGHT_RADIUS	= 900
