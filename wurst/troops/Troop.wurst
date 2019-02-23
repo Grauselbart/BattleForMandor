@@ -1,6 +1,9 @@
 package Troop
 
 import UnitObjEditing
+import ClosureTimers
+import LinkedList
+import Healing
 
 public integer 	BASE_SPEED 		= 290
 public integer 	SIGHT_RADIUS	= 900
@@ -8,6 +11,7 @@ public integer 	MAX_HP			= 100
 public integer	DMG_DICE_NUMBER	= 2
 public integer	DMG_DICE_SIZE	= 12
 public integer	DMG_FLAT		= 12
+public group	troopGroup		= null
 
 // base stats for troops
 public class TroopDefinition extends HeroDefinition
@@ -74,6 +78,8 @@ public enum TroopStat
 	HealingPower
 
 
+public LinkedList<Troop> TROOP_UNITS = new LinkedList<Troop>
+
 public abstract class Troop
 	unit TROOP_UNIT
 	
@@ -103,7 +109,29 @@ public abstract class Troop
 		switch(name)
 			case HpReg
 				r = TROOP_STAT_HPREG
+			case MpReg
+				r = TROOP_STAT_MANAREG
+			case CritChance
+				r = TROOP_STAT_CRITCHANCE
+			case CritDmg
+				r = TROOP_STAT_CRITDAMAGE
+			case Tenacity
+				r = TROOP_STAT_TENACITY
+			case Concentration
+				r = TROOP_STAT_CONCENTRATION
+			case HealingPower
+				r = TROOP_STAT_HEALINGPOWER
 			default
 				r = 0.
 				print("ERROR: Troop stat not found!")
 		return r
+	
+init
+	doPeriodically(1) cb ->
+		LLIterator<Troop> i = TROOP_UNITS.iterator()
+		Troop trp = null
+		while i.hasNext()
+			trp = i.next()
+			let baseHP = trp.getTroop().getHP()
+			let reg = trp.getStat(TroopStat.HpReg)
+			trp.getTroop().healUnit(trp.getTroop(), reg, false)

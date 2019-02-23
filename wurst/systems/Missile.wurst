@@ -2,7 +2,6 @@ package Missile
 
 import Common
 import HashMap
-import TerrainUtils
 import LinkedListModule
 import ClosureForGroups
 import CombatText
@@ -141,6 +140,7 @@ public class Missile
         misPeriodicTrigger	= null
         misPeriodicInt		= 1 * FPS
 
+
     /* Creates a projectile as a homing missile and defines standard values for range, speed and damage*/
     static function missileHomingAttack(unit src, unit tgt, string projectileArt, real spd, real rng)
         let PROJECTILE_LAUNCH_Z = 65.
@@ -232,6 +232,10 @@ public class Missile
             missileNodes.get(misProjectile).hitFx               = misHitEffect
             missileNodes.get(misProjectile).hitFxAttach         = misHitAttatch
             missileNodes.get(misProjectile).hitTarget           = false
+            missileNodes.get(misProjectile).hitEnemy            = misHitEnemy
+            missileNodes.get(misProjectile).hitAlly             = misHitAlly
+            missileNodes.get(misProjectile).hitMagicImmune      = misHitMagicImmune
+            missileNodes.get(misProjectile).hitDestructable     = misHitDestructable
             missileNodes.get(misProjectile).dmgType             = misDamageType
             missileNodes.get(misProjectile).endOnHit            = misEndOnHit
             missileNodes.get(misProjectile).endOnTarget         = misEndOnTarget
@@ -262,6 +266,9 @@ public class Missile
             missile.hitFx           = misHitEffect
             missile.hitFxAttach     = misHitAttatch
             missile.hitTarget       = false
+            missile.hitEnemy        = misHitEnemy
+            missile.hitAlly         = misHitAlly
+            missile.hitMagicImmune  = misHitMagicImmune
             missile.hitDestructable = misHitDestructable
             missile.dmgType         = misDamageType
             missile.endOnHit        = misEndOnHit
