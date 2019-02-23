@@ -3,6 +3,16 @@ import LinkedList
 
 public LinkedList<PlayerHero> PLAYER_HEROES = new LinkedList<PlayerHero>
 
+public enum HeroStat
+	HpReg
+	MpReg
+	CritChance
+	CritDmg
+	Tenacity
+	Concentration
+	Cooldown
+	HealingPower
+
 public abstract class PlayerHero
 	// actual hero unit
 	unit HERO_UNIT
@@ -14,15 +24,15 @@ public abstract class PlayerHero
 	int HERO_SPELL_E
 	int HERO_SPELL_R
 
-	// Additional Stats						//INTERGER		// DISCRIPTION
-	real 	HERO_STAT_HPREG=0.				//'HPRE'		// hit point regeneration per second
-	real 	HERO_STAT_MANAREG=0.			//'MARE'		// mana regeneration per second
-	real 	HERO_STAT_CRITCHANCE=0.			//'CRCH'		// chance to crit
-	real 	HERO_STAT_CRITDAMAGE=0.			//'CRDA'		// increased crit damage, standard is 200%
-	real 	HERO_STAT_TENACITY=0. 			//'TENA'		// Status resistance
-	real 	HERO_STAT_CONCENTRATION=0.		//'CONC'		// buff/debuff duration multiplier
-	real 	HERO_STAT_COOLDOWNPERCENT=0. 	//'CDPE'		// global % CDR
-	real 	HERO_STAT_COOLDOWNFLAT=0. 		//'CDFL'		// global flat CDR
+	// Additional Stats								// DESCRIPTION
+	real 	HERO_STAT_HPREG=0.						// hit point regeneration per second
+	real 	HERO_STAT_MANAREG=0.					// mana regeneration per second
+	real 	HERO_STAT_CRITCHANCE=0.					// chance to crit
+	real 	HERO_STAT_CRITDAMAGE=0.					// increased crit damage, standard is 200%
+	real 	HERO_STAT_TENACITY=0. 					// Status resistance
+	real 	HERO_STAT_CONCENTRATION=0.				// buff/debuff duration multiplier
+	real 	HERO_STAT_COOLDOWNPERCENT=0. 			// global % CDR
+	real 	HERO_STAT_HEALINGPOWER=0. 				// global flat CDR
 	
 	// stats missing?
 
@@ -34,29 +44,29 @@ public abstract class PlayerHero
 		return this.HERO_UNIT
 	
 	//Returns the stat with the given id. the IDs are listed above and in the function itself. Just check.
-	function getStat(int i) returns real
+	function getStat(HeroStat name) returns real
 		real r
-		switch(i)
-			case 'HPRE'
+		switch(name)
+			case hpReg
 				r=HERO_STAT_HPREG
-			case 'MARE'
+			case mpReg
 				r=HERO_STAT_MANAREG
-			case 'CRCH'
+			case critChance
 				r=HERO_STAT_CRITCHANCE
-			case 'CRDA'
+			case critDmg
 				r=HERO_STAT_CRITDAMAGE
-			case 'TENA'
+			case tenacity
 				r=HERO_STAT_TENACITY
-			case 'CONC'
+			case concentration
 				r=HERO_STAT_CONCENTRATION
-			case 'CDPE'
+			case cooldown
 				r=HERO_STAT_COOLDOWNPERCENT
-			case 'CDFL'
-				r=HERO_STAT_COOLDOWNFLAT
+			case healingPower
+				r=HERO_STAT_HEALINGPOWER
 			default
 				r=0.
 				//Debug message if the given stat is invalid
-				print("ERROR: "+i.toString()+" not found as a hero stat!")
+				print("ERROR: Hero stat not found!")
 		return r
 	
 //returns the PlayerHero of given unit. 

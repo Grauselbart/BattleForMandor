@@ -29,13 +29,13 @@ public function setIntBetween(integer val, integer min, integer max) returns int
 	else
 		return val
 
-public function setRealBetween(real val, real min, real max) returns real
-	if val <= min
+public function real.setBetween(real min, real max) returns real
+	if this <= min
 		return min
-	else if val >= max
+	else if this >= max
 		return max
 	else
-		return val
+		return this
 
 public function rect.getRandomPos() returns vec2
 	let x = GetRandomReal(this.getMinX(), this.getMaxX())

@@ -141,6 +141,33 @@ public class Missile
         misPeriodicTrigger	= null
         misPeriodicInt		= 1 * FPS
 
+    /* Creates a projectile as a homing missile and defines standard values for range, speed and damage*/
+    static function missileHomingAttack(unit src, unit tgt, string projectileArt, real spd, real rng)
+        let PROJECTILE_LAUNCH_Z = 65.
+        let PROJECTILE_LAUNCH_ROTATION = (0.).asAngleDegrees()
+        let PROJECTILE_LAUNCH_OFFSET = 10.
+        // start position
+        let sPos = src.getPos()
+        let startXY = sPos + ZERO2.polarOffset(src.getFacingAngle() + PROJECTILE_LAUNCH_ROTATION, PROJECTILE_LAUNCH_OFFSET)
+        let startZ = sPos.getTerrainZ() + PROJECTILE_LAUNCH_Z
+        // calculate damage
+        let basedmg = src.getBaseDamage(1)
+        let n = src.getDiceNumber(1)
+        var roll = 0
+        for i = 1 to n
+            roll += GetRandomInt(1, src.getDiceSides(1))
+        let dmg = I2R(basedmg + roll)
+        // create projectiles
+        misProjectile = addEffect(projectileArt, startXY.withZ(startZ))
+        misSource = src
+        misTarget = tgt
+        misSpeed = spd
+        misAngle = startXY.angleTo(tgt.getPos())
+        misMaxRange = rng*1.5
+        misHitBox = 50.
+        misDamageType = DamageType.ATTACK
+        misHitDamage = dmg
+
     static function registerMissile()
         // safety check for linked list (to prevent negative list size)
         if size < 0
