@@ -22,7 +22,7 @@ class WrathfulSmiteSpell
                 if h==null
                         this.duration=WRATHFULSMITE_BASE_DURATION
                 else
-                        this.duration=WRATHFULSMITE_BASE_DURATION*(1 + h.getStat('CONC'))
+                        this.duration=WRATHFULSMITE_BASE_DURATION*(1 + h.getStat(HeroStat.Concentration))
                 this.caster=u
                 this.damage=calcDamage()
                 this.t=CreateTimer()

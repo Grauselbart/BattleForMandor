@@ -37,7 +37,7 @@ function cooldownreduction()
 
 
 function createShield() 
-	new Shield(PLAYER_HEROES.get(0).getHero(), 300, 5,Abilities.voodooAuraTarget,"overhead")
+	new Shield(PLAYER_HEROES.get(0).getHero(), 100, 100,Abilities.voodooAuraTarget,"overhead")
 
 function spawnArcher()
 	CreateUnit(pCreeps, archerId, 0, 0, angle(0).degrees())

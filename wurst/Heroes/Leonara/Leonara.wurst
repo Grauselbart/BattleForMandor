@@ -11,14 +11,14 @@ public class Leonara extends PlayerHero
 		print("Leonara was picked by " + GetPlayerName(owner))
 		
 		//Add abilities to leonara
-		UnitAddAbility(this.getHero(), LEONARA_SPELL_ID_P)
+		UnitAddAbility(this.getHero(), LEONARA_SPELL_ID_P_PSEUDO)
 		UnitAddAbility(this.getHero(), LEONARA_SPELL_ID_Q)
 		UnitAddAbility(this.getHero(), LEONARA_SPELL_ID_W)
 		UnitAddAbility(this.getHero(), LEONARA_SPELL_ID_E)
 		UnitAddAbility(this.getHero(), LEONARA_SPELL_ID_R)
 
 		//Set ability IDs to the PlayerHero for later interaction etc. (e.g.: steal enemies Q ability)
-		HERO_SPELL_P=LEONARA_SPELL_ID_P
+		HERO_SPELL_P=LEONARA_SPELL_ID_P_PSEUDO
 		HERO_SPELL_Q=LEONARA_SPELL_ID_Q
 		HERO_SPELL_W=LEONARA_SPELL_ID_W
 		HERO_SPELL_E=LEONARA_SPELL_ID_E

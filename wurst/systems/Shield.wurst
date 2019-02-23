@@ -1,6 +1,5 @@
 package Shield
 import LinkedList
-import ClosureTimers
 
 LinkedList<Shield> shields = new LinkedList<Shield>
 
@@ -10,6 +9,7 @@ public class Shield
     real currentAmount
     real maxAmount
     effect e
+    timer t
 
     construct(unit u, real amount, real duration, string fx, string fxAttach )
         this.u=u
@@ -17,7 +17,7 @@ public class Shield
         this.maxAmount=amount
         this.currentAmount=amount
         this.e=this.u.addEffect(fx, fxAttach)
-
+        this.t=CreateTimer()
         //set max hp
         real actual=GetUnitState(this.u, UNIT_STATE_MAX_LIFE)
         this.u.setMaxHP(actual.toInt() + this.maxAmount.toInt())
@@ -29,18 +29,17 @@ public class Shield
         //Add to shields
         shields.add(this)
 
-        doAfter(duration) ->
-            destroy this
+        TimerStart(this.t, this.duration, false, function onEnd)
 
     ondestroy
-        e.destr()
+        this.e.destr()
+        this.t.destr()
         //set actual hp
         real actual=GetUnitState(u, UNIT_STATE_LIFE)
-        u.setHP(actual - currentAmount)
-        
+        this.u.setHP(actual - this.currentAmount)
         //set max hp
         actual=GetUnitState(u, UNIT_STATE_MAX_LIFE)
-        u.setMaxHP(actual.toInt() - maxAmount.toInt())
+        this.u.setMaxHP(actual.toInt() - this.maxAmount.toInt())
 
         shields.remove(this)
 
@@ -49,9 +48,26 @@ public class Shield
 
     function getCurrentAmount() returns real
         return this.currentAmount
+
+    function getTimer() returns timer
+        return this.t
     
     function reduceCurrentAmount(real dmg)
         this.currentAmount-=dmg
+
+
+function onEnd()
+    timer check=GetExpiredTimer()
+    LLIterator<Shield> i=shields.iterator()
+    Shield current
+    while i.hasNext()
+        current=i.next()
+        if current.getTimer()==check
+            destroy current
+            break
+        
+
+
 
 
 
