@@ -32,7 +32,7 @@ public abstract class PlayerHero
 	real 	HERO_STAT_TENACITY=0. 					// Status resistance
 	real 	HERO_STAT_CONCENTRATION=0.				// buff/debuff duration multiplier
 	real 	HERO_STAT_COOLDOWNPERCENT=0. 			// global % CDR
-	real 	HERO_STAT_HEALINGPOWER=0. 				// global flat CDR
+	real 	HERO_STAT_HEALINGPOWER=0. 				// increased healing
 	
 	// stats missing?
 

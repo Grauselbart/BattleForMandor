@@ -2,7 +2,7 @@ package Healing
 
 import CombatText
 
-function unit.healUnit(unit target, real amount)
+function unit.healUnit(unit target, real amount, boolean showTxt)
 	var healModRel = 0.
 	var healModAbs = 0.
 	//Modification
@@ -10,5 +10,6 @@ function unit.healUnit(unit target, real amount)
 	//Give healing
 	let healing = amount *(1+ healModRel) + healModAbs
 	target.addHP(healing)
-	//Create floating text
-	target.healText(healing, this.getOwner())
+	if showTxt
+		//Create floating text
+		target.healText(healing, this.getOwner())
