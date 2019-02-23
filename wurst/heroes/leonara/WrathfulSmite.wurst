@@ -26,7 +26,6 @@ class WrathfulSmiteSpell
                 this.caster=u
                 this.damage=calcDamage()
                 this.t=CreateTimer()
-
                 SPELL_INSTANCES_WRATHFULSMITE.add(this)
                 //Create a timer that destorys the spell after its duration
                 TimerStart(this.t, this.duration, false, function endSpell)

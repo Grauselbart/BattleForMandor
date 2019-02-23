@@ -28,7 +28,7 @@ public abstract class PlayerHero
 	real 	HERO_STAT_HPREG=0.						// hit point regeneration per second
 	real 	HERO_STAT_MANAREG=0.					// mana regeneration per second
 	real 	HERO_STAT_CRITCHANCE=0.					// chance to crit
-	real 	HERO_STAT_CRITDAMAGE=0.					// increased crit damage, standard is 200%
+	real 	HERO_STAT_CRITDAMAGE=2.					// increased crit damage, standard is 200%
 	real 	HERO_STAT_TENACITY=0. 					// Status resistance
 	real 	HERO_STAT_CONCENTRATION=0.				// buff/debuff duration multiplier
 	real 	HERO_STAT_COOLDOWNPERCENT=0. 			// global % CDR
