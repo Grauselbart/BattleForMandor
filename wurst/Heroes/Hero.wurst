@@ -47,21 +47,21 @@ public abstract class PlayerHero
 	function getStat(HeroStat name) returns real
 		real r
 		switch(name)
-			case hpReg
+			case HpReg
 				r=HERO_STAT_HPREG
-			case mpReg
+			case MpReg
 				r=HERO_STAT_MANAREG
-			case critChance
+			case CritChance
 				r=HERO_STAT_CRITCHANCE
-			case critDmg
+			case CritDmg
 				r=HERO_STAT_CRITDAMAGE
-			case tenacity
+			case Tenacity
 				r=HERO_STAT_TENACITY
-			case concentration
+			case Concentration
 				r=HERO_STAT_CONCENTRATION
-			case cooldown
+			case Cooldown
 				r=HERO_STAT_COOLDOWNPERCENT
-			case healingPower
+			case HealingPower
 				r=HERO_STAT_HEALINGPOWER
 			default
 				r=0.
