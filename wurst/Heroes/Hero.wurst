@@ -1,6 +1,5 @@
 package Hero
 import LinkedList
-import ClosureTimers
 
 public LinkedList<PlayerHero> PLAYER_HEROES = new LinkedList<PlayerHero>
 
