@@ -1,0 +1,109 @@
+package Troop
+
+import UnitObjEditing
+
+public integer 	BASE_SPEED 		= 290
+public integer 	SIGHT_RADIUS	= 900
+public integer 	MAX_HP			= 100
+public integer	DMG_DICE_NUMBER	= 2
+public integer	DMG_DICE_SIZE	= 12
+public integer	DMG_FLAT		= 12
+
+// base stats for troops
+public class TroopDefinition extends HeroDefinition
+	construct(int id)
+		super(id, 'Hart')
+		// general
+		setName("")
+		setSpeedBase(BASE_SPEED)
+		setFoodCost(0)
+		setSightRadiusDay(SIGHT_RADIUS)
+		setSightRadiusNight(SIGHT_RADIUS)
+		setUnitSoundSet("none")
+		setCanFlee(false)
+		setGoldBountyAwardedBase(0)
+		setGoldBountyAwardedNumberofDice(0)
+		setGoldBountyAwardedSidesperDie(0)
+		// anim stuff
+		setAnimationWalkSpeed(BASE_SPEED.toReal())
+		setAnimationRunSpeed(BASE_SPEED.toReal())
+		setOrientationInterpolation(0)
+		// spells
+		setHeroAbilities("")
+		setNormalAbilities("")
+		setAnimationCastBackswing(0.)
+		setAnimationCastPoint(0.)
+		// names
+		setProperNames("")
+		setProperNamesUsed(1)
+		// attributes
+		setStartingStrength(0)
+		setStartingAgility(0)
+		setStartingIntelligence(0)
+		setStrengthPerLevel(0.)
+		setAgilityPerLevel(0.)
+		setIntelligencePerLevel(0.)
+		// hp and mana
+		setHitPointsMaximumBase(MAX_HP)
+		setHitPointsRegenerationRate(0.)
+		setHitPointsRegenerationType("always")
+		setManaMaximum(100)
+		setManaInitialAmount(0)
+		setManaRegeneration(0)
+		// combat
+		setAttack1CooldownTime(3.)
+		setAttack1AttackType(AttackType.Normal)
+		setAcquisitionRange(1000)
+		setAttack1Range(100)
+		setAttack1DamageBase(12)
+		setAttack1DamageNumberofDice(2)
+		setAttack1DamageSidesperDie(12)
+		setAttack1ProjectileArt("none")
+		setAttack1WeaponType(WeaponType.Instant)
+		// defense
+		setArmorType(ArmorType.Normal)
+		setDefenseBase(0)
+
+public enum TroopStat
+	HpReg
+	MpReg
+	CritChance
+	CritDmg
+	Tenacity
+	Concentration
+	HealingPower
+
+
+public abstract class Troop
+	unit TROOP_UNIT
+	
+	// Abilities
+	int TROOP_SPELL_PASSIVE
+	int TROOP_SPELL_ACTIVE
+
+	// Additional Stats								// DESCRIPTION
+	real 	TROOP_STAT_HPREG=0.						// hit point regeneration per second
+	real 	TROOP_STAT_MANAREG=0.					// mana regeneration per second
+	real 	TROOP_STAT_CRITCHANCE=0.				// chance to crit
+	real 	TROOP_STAT_CRITDAMAGE=2.				// increased crit damage, standard is 200%
+	real 	TROOP_STAT_TENACITY=0. 					// Status resistance
+	real 	TROOP_STAT_CONCENTRATION=0.				// buff/debuff duration multiplier
+	real 	TROOP_STAT_HEALINGPOWER=0. 				// incereased healing
+
+	construct(player owner, int unitId, vec2 pos, angle facing)
+		TROOP_UNIT = createUnit(owner, unitId, pos, facing)
+	
+	// returns the troop unit
+	function getTroop() returns unit
+		return this.TROOP_UNIT
+
+	// returns the stat with the given enum
+	function getStat(TroopStat name) returns real
+		real r
+		switch(name)
+			case HpReg
+				r = TROOP_STAT_HPREG
+			default
+				r = 0.
+				print("ERROR: Troop stat not found!")
+		return r
