@@ -5,8 +5,8 @@ import Leonara_Data
 
 
 public class Leonara extends PlayerHero
-	construct(player owner, real posX, real posY, real angle)
-		super(owner, HERO_ID_LEONARA, posX, posY, angle)
+	construct(player owner, vec2 pos, angle facing)
+		super(owner, HERO_ID_LEONARA, pos, facing)
 
 		print("Leonara was picked by " + GetPlayerName(owner))
 		

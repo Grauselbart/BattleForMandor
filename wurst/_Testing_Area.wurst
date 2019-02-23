@@ -27,7 +27,7 @@ init
 	
 function setupUnit()
 	print("Create new Leonara")
-	new Leonara(Player(0),0,0,0)
+	new Leonara(Player(0),vec2(0,0),angle(0))
 
 
 function cooldownreduction()

@@ -38,8 +38,8 @@ public abstract class PlayerHero
 	
 	// stats missing?
 
-	construct(player owner, int unitId, real posX, real posY, real angle)
-		HERO_UNIT=createUnit(owner, unitId, vec2(posX,posY), angle(angle))
+	construct(player owner, int unitId, vec2 pos,angle facing)
+		HERO_UNIT=createUnit(owner, unitId, pos, facing)
 
 	//returns the hero unit
 	function getHero() returns unit
