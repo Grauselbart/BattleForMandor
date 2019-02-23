@@ -17,19 +17,22 @@ class WrathfulSmiteSpell
         timer t
         effect e=null
 
-        construct(PlayerHero h)
-                caster=h.getHero()
-                duration=WRATHFULSMITE_BASE_DURATION*(1 + h.getStat('CONC'))
-                damage=calcDamage()
-                t=CreateTimer()
-                run()
-
         construct(unit u)
-                caster=u
-                duration=WRATHFULSMITE_BASE_DURATION
-                damage=calcDamage()
-                t=CreateTimer()
-                run()
+                PlayerHero h=getPlayerHero(u)
+                if h==null
+                        this.duration=WRATHFULSMITE_BASE_DURATION
+                else
+                        this.duration=WRATHFULSMITE_BASE_DURATION*(1 + h.getStat('CONC'))
+                this.caster=u
+                this.damage=calcDamage()
+                this.t=CreateTimer()
+
+                SPELL_INSTANCES_WRATHFULSMITE.add(this)
+                //Create a timer that destorys the spell after its duration
+                TimerStart(this.t, this.duration, false, function endSpell)
+                this.e=this.caster.addEffect(WRATHFULSMITE_EFFECT, WRATHFULSMITE_EFFECT_ATTACH)
+                //Adds a buff !DOES NOT WORK!
+                this.caster.addAbility(BUFF_ID_WRATHFULSMITE) 
 
         function getDamage() returns real
                 return this.damage
@@ -54,13 +57,6 @@ class WrathfulSmiteSpell
                 amount+=flat    // adds the flat damage to the random amount
                 return amount
 
-        function run()
-                SPELL_INSTANCES_WRATHFULSMITE.add(this)
-                //Create a timer that destorys the spell after its duration
-                TimerStart(t, duration, false, function endSpell)
-                this.e=this.caster.addEffect(WRATHFULSMITE_EFFECT, WRATHFULSMITE_EFFECT_ATTACH)
-                //Adds a buff !DOES NOT WORK!
-                caster.addAbility(BUFF_ID_WRATHFULSMITE) 
         
         ondestroy
                 SPELL_INSTANCES_WRATHFULSMITE.remove(this)
@@ -116,12 +112,7 @@ function initSpell()
         check=unitInList(u)
         if check==null //Checks if there is already a instance of this spell for the casting unit and only resets the timer if it isnt null (see 'else')
                 if thisSpell() //checks if the unit is a PlayerHero or a simple unit
-                        PlayerHero h=getPlayerHero(u)
-                   //depending on if the unit is a PlayerHero or not, the new spell instance is created
-                        if h==null
-                                new WrathfulSmiteSpell(u)
-                        else
-                                new WrathfulSmiteSpell(h)
+                        new WrathfulSmiteSpell(u)
         else
                 TimerStart(check.getTimer(),check.getDuration(),false,function endSpell) //Timer is getting a reset here
 
