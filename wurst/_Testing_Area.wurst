@@ -3,6 +3,7 @@ import Leonara
 import Hero
 import Leonara_Data
 import Shield
+import Abilities
 
 // For testing suff to keep the rest clean
 init
@@ -10,9 +11,9 @@ init
 	TriggerRegisterPlayerChatEvent(tmp, Player(0), "hi", false)
 	tmp.addAction(function setupUnit)
 
-	trigger cd=CreateTrigger()
+	/*trigger cd=CreateTrigger()
 	TriggerRegisterPlayerChatEvent(cd, Player(0), "-", false)
-	cd.addAction(function cooldownreduction)
+	cd.addAction(function cooldownreduction)*/
 
 	trigger hp=CreateTrigger()
 	TriggerRegisterPlayerChatEvent(hp, Player(0), "+", false)
@@ -24,10 +25,10 @@ function setupUnit()
 
 
 function cooldownreduction()
-	PLAYER_HEROES.get(0).getHero().setAbilityCooldown(idLeoQ, 1, PLAYER_HEROES.get(0).getHero().getAbilityCooldownRemaining(idLeoQ)-2) 
+	PLAYER_HEROES.get(0).getHero().setAbilityCooldown(LEONARA_SPELL_ID_Q, 1, PLAYER_HEROES.get(0).getHero().getAbilityCooldownRemaining(LEONARA_SPELL_ID_Q)-2) 
 	//sadly reduces only the "golbal" cooldown of that ability, not reducing the remaining cooldown
 	print("Cooldown reduced")
 
 
 function createShield() 
-	new Shield(PLAYER_HEROES.get(0).getHero(), 300, 5)
+	new Shield(PLAYER_HEROES.get(0).getHero(), 300, 5,Abilities.voodooAuraTarget,"overhead")

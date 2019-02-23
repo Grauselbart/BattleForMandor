@@ -5,10 +5,16 @@ import Icons
 import UnitIds
 import BuffObjEditing
 
+public let LEONARA_SPELL_ID_P=compiletime(ABIL_ID_GEN.next())
+public let LEONARA_SPELL_ID_Q=compiletime(ABIL_ID_GEN.next())
+public let LEONARA_SPELL_ID_W=compiletime(ABIL_ID_GEN.next())
+public let LEONARA_SPELL_ID_E=compiletime(ABIL_ID_GEN.next())
+public let LEONARA_SPELL_ID_R=compiletime(ABIL_ID_GEN.next())
 
-public let idLeoQ=compiletime(ABIL_ID_GEN.next())
+
+
 @compiletime function createAbilityLeoQ()
-	new ChannelAbilityPreset(idLeoQ, 1,true)
+	new ChannelAbilityPreset(LEONARA_SPELL_ID_Q, 1,true)
 		..presetTargetTypes(Targettype.NONE)
 		..presetTooltipNormal(lvl -> "Wrathful Smite")
 		..presetTooltipNormalExtended(lvl -> "Enhances the next basic attack, dealing additional damage.")
@@ -19,9 +25,9 @@ public let idLeoQ=compiletime(ABIL_ID_GEN.next())
 		..presetButtonPosNormal(0, 2)
 		..presetIcon(Icons.bTNDivineShieldOff)
 
-public let idLeoW=compiletime(ABIL_ID_GEN.next())
+
 @compiletime function createAbilityLeoW()
-	new ChannelAbilityPreset(idLeoW, 1,true)
+	new ChannelAbilityPreset(LEONARA_SPELL_ID_W, 1,true)
 		..presetTargetTypes(Targettype.UNIT)
 		..presetTooltipNormal(lvl -> "Fio's Distraction")
 		..presetTooltipNormalExtended(lvl -> "Fio distracts the target, weakening it for a few seconds")
@@ -33,9 +39,9 @@ public let idLeoW=compiletime(ABIL_ID_GEN.next())
 		..presetButtonPosNormal(1, 2)
 		..presetIcon(Icons.bTNFaerieFire)
 
-public let idLeoE=compiletime(ABIL_ID_GEN.next())
+
 @compiletime function createAbilityLeoE()
-	new ChannelAbilityPreset(idLeoE, 1,true)
+	new ChannelAbilityPreset(LEONARA_SPELL_ID_E, 1,true)
 		..presetTargetTypes(Targettype.NONE)
 		..presetTooltipNormal(lvl -> "Vengeful Shield")
 		..presetTooltipNormalExtended(lvl -> "Shields Leonara and might heal her")
@@ -46,9 +52,9 @@ public let idLeoE=compiletime(ABIL_ID_GEN.next())
 		..presetButtonPosNormal(2, 2)
 		..presetIcon(Icons.bTNAbsorbMagic)
 
-public let idLeoR=compiletime(ABIL_ID_GEN.next())
+
 @compiletime function createAbilityLeoR()
-	new ChannelAbilityPreset(idLeoR, 1,true)
+	new ChannelAbilityPreset(LEONARA_SPELL_ID_R, 1,true)
 		..presetTargetTypes(Targettype.UNIT)
 		..presetTooltipNormal(lvl -> "Pact of Enmity")
 		..presetTooltipNormalExtended(lvl -> "Target enemy becomes the archenemy")
@@ -60,9 +66,8 @@ public let idLeoR=compiletime(ABIL_ID_GEN.next())
 		..presetButtonPosNormal(3, 2)
 		..presetIcon(Icons.bTNImmolationOn)
 		
-public let idLeoP=compiletime(ABIL_ID_GEN.next())
 @compiletime function createAbilityLeoP()
-	new ChannelAbilityPreset(idLeoP, 1,true)
+	new ChannelAbilityPreset(LEONARA_SPELL_ID_P, 1,true)
 		..presetTargetTypes(Targettype.PASSIVE)
 		..presetTooltipNormal(lvl -> "Pact of Wrath")
 		..presetTooltipNormalExtended(lvl -> "Gets stacks of wrath")

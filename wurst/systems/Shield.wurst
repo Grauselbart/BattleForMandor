@@ -9,12 +9,14 @@ public class Shield
     real duration
     real currentAmount
     real maxAmount
+    effect e
 
-    construct(unit u, real amount, real duration)
+    construct(unit u, real amount, real duration, string fx, string fxAttach )
         this.u=u
         this.duration=duration
         this.maxAmount=amount
         this.currentAmount=amount
+        this.e=this.u.addEffect(fx, fxAttach)
 
         //set max hp
         real actual=GetUnitState(this.u, UNIT_STATE_MAX_LIFE)
@@ -31,6 +33,7 @@ public class Shield
             destroy this
 
     ondestroy
+        e.destr()
         //set actual hp
         real actual=GetUnitState(u, UNIT_STATE_LIFE)
         u.setHP(actual - currentAmount)

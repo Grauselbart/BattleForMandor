@@ -100,7 +100,7 @@ function unitInList(unit u) returns WrathfulSmiteSpell
 
 // Check if the casting spell is Wrathful Smite
 function thisSpell() returns boolean
-        return GetSpellAbilityId()==idLeoQ
+        return GetSpellAbilityId()==LEONARA_SPELL_ID_Q
 
 /*Create a spell instance depending on: 1. if there is an instance for this unit already -> resets the duration
                                         2. if the unit is a PlayerHero or not -> uses different constructors (especially for the duration due to the HERO_STAT_CONCENTRATION)
