@@ -11,7 +11,7 @@ public function unit.healUnit(unit target, real amount, boolean showTxt)
 	PlayerHero ph=getPlayerHero(target)
 	if ph!=null
 		healModRel=amount*(1+ph.getStat(HeroStat.HealingPower))
-		
+
 	//Give healing
 	let healing = amount *(1+ healModRel) + healModAbs
 	target.addHP(healing)
