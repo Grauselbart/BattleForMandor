@@ -4,7 +4,7 @@ import ClosureTimers
 import Leonara_Data
 import Abilities
 
-constant real PACTOFWRATH_DURATION=3.
+constant real PACTOFWRATH_DURATION=5.
 constant int PACTOFWRATH_ID=LEONARA_SPELL_ID_P
 constant string PACTOFWRATH_FX=Abilities.roarCaster
 constant string PACTOFWRATH_FX_ATTACH="origin"
@@ -12,11 +12,15 @@ constant string PACTOFWRATH_FX_ATTACH="origin"
 public function getPactOfWrathStack(unit u)
     real duration=PACTOFWRATH_DURATION
     //check if unit is a PlayerHero and alter duration
+    // real max=u.getAttackCooldown(1)
+    // real cdr=max*0.5
+    // u.setAttackCooldown(max-cdr, 1)
     PlayerHero check=getPlayerHero(u)
     effect e=u.addEffect(PACTOFWRATH_FX, PACTOFWRATH_FX_ATTACH)
     e.destr()
     if check!=null
         duration*=(1+check.getStat(HeroStat.Concentration))
+        
     //alter Ability
     int level=GetUnitAbilityLevel(u, PACTOFWRATH_ID)
     if level==0
@@ -24,8 +28,9 @@ public function getPactOfWrathStack(unit u)
     else
         SetUnitAbilityLevel(u,PACTOFWRATH_ID, level+1)
 
-
     doAfter(duration)->
+        // max=u.getAttackCooldown(1)
+        // u.setAttackCooldown(max+cdr, 1)
         level=GetUnitAbilityLevel(u, PACTOFWRATH_ID)
         if level<=1
             UnitRemoveAbility(u, PACTOFWRATH_ID)
