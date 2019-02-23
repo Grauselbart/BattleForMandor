@@ -13,6 +13,43 @@ public let LEONARA_SPELL_ID_E=compiletime(ABIL_ID_GEN.next())
 public let LEONARA_SPELL_ID_R=compiletime(ABIL_ID_GEN.next())
 public let LEONARA_SPELL_ID_P_PSEUDO=compiletime(ABIL_ID_GEN.next())
 
+constant let MAX_HP=500
+constant let MAX_MANA=250
+constant let ARMOR=5
+constant let DAMAGE_FLAT=5
+constant let DAMAGE_DICE=6.
+constant let DAMAGE_ROLLS=2
+constant let ATTACKSPEED=2.0
+constant let MOVESPEED=300
+constant let ATTACKRANGE=125
+constant let PROPERNAME="Leonara"
+constant let NAME="Paladin of Wrath"
+
+
+@compiletime function createHero()
+	new HeroDefinition(HERO_ID_LEONARA, UnitIds.paladin)
+		..setProperNames(PROPERNAME)
+		..setProperNamesUsed(1)
+		..setName(NAME)
+		..setAttack1CooldownTime(ATTACKSPEED)
+		..setAttack1Range(ATTACKRANGE)
+		..setStartingAgility(0)
+		..setStartingIntelligence(0)
+		..setStartingStrength(0)
+		..setAgilityPerLevel(0)
+		..setIntelligencePerLevel(0)
+		..setStrengthPerLevel(0)
+		..setHitPointsMaximumBase(MAX_HP)
+		..setHitPointsRegenerationRate(0)
+		..setManaInitialAmount(9999999)
+		..setManaMaximum(MAX_MANA)
+		..setManaRegeneration(0)
+		..setAttack1DamageBase(DAMAGE_FLAT)
+		..setAttack1DamageNumberofDice(DAMAGE_ROLLS)
+		..setAttack1DamageSpillDistance(DAMAGE_DICE)
+		..setSpeedBase(MOVESPEED)
+		..hideHeroDeathMsg(true)
+		..setFoodCost(0)
 
 
 @compiletime function createAbilityLeoQ()
@@ -85,30 +122,6 @@ public let LEONARA_SPELL_ID_P_PSEUDO=compiletime(ABIL_ID_GEN.next())
 	new AbilityDefinitionAttackSpeedIncrease(LEONARA_SPELL_ID_P)
 		..setLevels(10)
 		..presetAttackSpeedIncrease(lvl -> 0.3 * lvl)
-
-
-@compiletime function createHero()
-	new HeroDefinition(HERO_ID_LEONARA, UnitIds.paladin)
-		..setProperNames("Leonara")
-		..setProperNamesUsed(1)
-		..setName("Paladin of Wrath")
-		..setStartingAgility(0)
-		..setStartingIntelligence(0)
-		..setStartingStrength(0)
-		..setAgilityPerLevel(0)
-		..setIntelligencePerLevel(0)
-		..setStrengthPerLevel(0)
-		..setHitPointsMaximumBase(500)
-		..setHitPointsRegenerationRate(0)
-		..setManaInitialAmount(9999999)
-		..setManaMaximum(250)
-		..setManaRegeneration(0)
-		..setAttack1DamageBase(3)
-		..setAttack1DamageNumberofDice(2)
-		..setAttack1DamageSpillDistance(6)
-		..setSpeedBase(300)
-		..hideHeroDeathMsg(true)
-		..setFoodCost(0)
 
 public let BUFF_ID_WRATHFULSMITE=compiletime(BUFF_ID_GEN.next())
 @compiletime function createBuff()

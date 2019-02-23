@@ -1,5 +1,6 @@
 package Hero
 import LinkedList
+import ClosureTimers
 
 public LinkedList<PlayerHero> PLAYER_HEROES = new LinkedList<PlayerHero>
 
@@ -14,7 +15,7 @@ public enum HeroStat
 	HealingPower
 
 public abstract class PlayerHero
-	// actual hero unit
+	//Actual hero unit
 	unit HERO_UNIT
 
 	// Abilities
@@ -25,10 +26,10 @@ public abstract class PlayerHero
 	int HERO_SPELL_R
 
 	// Additional Stats								// DESCRIPTION
-	real 	HERO_STAT_HPREG=0.						// hit point regeneration per second
-	real 	HERO_STAT_MANAREG=0.					// mana regeneration per second
+	real 	HERO_STAT_HPREG=0.5						// hit point regeneration per second
+	real 	HERO_STAT_MANAREG=0.5					// mana regeneration per second
 	real 	HERO_STAT_CRITCHANCE=0.					// chance to crit
-	real 	HERO_STAT_CRITDAMAGE=2.					// increased crit damage, standard is 200%
+	real 	HERO_STAT_CRITDAMAGE=1.5				// increased crit damage, standard is 150%
 	real 	HERO_STAT_TENACITY=0. 					// Status resistance
 	real 	HERO_STAT_CONCENTRATION=0.				// buff/debuff duration multiplier
 	real 	HERO_STAT_COOLDOWNPERCENT=0. 			// global % CDR
@@ -68,7 +69,7 @@ public abstract class PlayerHero
 				//Debug message if the given stat is invalid
 				print("ERROR: Hero stat not found!")
 		return r
-	
+
 //returns the PlayerHero of given unit. 
 //returns null if the unit is not a PlayerHero.
 public function getPlayerHero(unit u) returns PlayerHero
