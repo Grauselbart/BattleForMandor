@@ -4,6 +4,7 @@ import ChannelAbilityPreset
 import Icons
 import UnitIds
 import BuffObjEditing
+import Abilities
 
 public let HERO_ID_LEONARA=compiletime(HERO_ID_GEN.next())
 public let LEONARA_SPELL_ID_P=compiletime(ABIL_ID_GEN.next())
@@ -13,6 +14,7 @@ public let LEONARA_SPELL_ID_E=compiletime(ABIL_ID_GEN.next())
 public let LEONARA_SPELL_ID_R=compiletime(ABIL_ID_GEN.next())
 public let LEONARA_SPELL_ID_P_PSEUDO=compiletime(ABIL_ID_GEN.next())
 
+//Hero stats
 constant let MAX_HP=500
 constant let MAX_MANA=250
 constant let ARMOR=5
@@ -24,6 +26,19 @@ constant let MOVESPEED=300
 constant let ATTACKRANGE=125
 constant let PROPERNAME="Leonara"
 constant let NAME="Paladin of Wrath"
+
+//Passive - Pact of Wrath stats
+public constant real PACTOFWRATH_DURATION=5.
+public constant int PACTOFWRATH_ID=LEONARA_SPELL_ID_P
+public constant string PACTOFWRATH_FX=Abilities.roarCaster
+public constant string PACTOFWRATH_FX_ATTACH="origin"
+
+//Q - Wrathful Smite stats
+public constant string WRATHFULSMITE_EFFECT_CASTER=Abilities.fireBallMissile
+public constant string WRATHFULSMITE_EFFECT_ATTACH_CASTER="weapon"
+public constant string WRATHFULSMITE_EFFECT_TARGET=Abilities.doomDeath
+public constant string WRATHFULSMITE_EFFECT_ATTACH_TARGET="origin"
+public constant real WRATHFULSMITE_BASE_DURATION=6.
 
 
 @compiletime function createHero()

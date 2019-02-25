@@ -8,6 +8,7 @@ import CombatText
 import WrathfulSmite
 import Shield
 import Leonara
+import Leonara_Data
 
 class DelayDat
     unit target
@@ -90,8 +91,14 @@ function handler() returns bool
     var dmgModRel = 0.
     var dmgModAbs = 0.
     /*===============Leonara Q================*/
+    //Deals additional damage and creates a special effect
     if dT==DamageType.INGAME
+        real tmp=dmgModAbs
         dmgModAbs+=checkWrathfulSmite(uS)
+        if tmp!=dmgModAbs
+            effect e=uT.addEffect(WRATHFULSMITE_EFFECT_TARGET, WRATHFULSMITE_EFFECT_ATTACH_TARGET)
+            e.setScale(0.5)
+            e.destr()
     /*========================================*/
     
     var dmgEnd = dmg * (1+dmgModRel) + dmgModAbs

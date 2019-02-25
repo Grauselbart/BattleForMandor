@@ -6,10 +6,6 @@ import PactOfWrath
 
 public LinkedList<WrathfulSmiteSpell> SPELL_INSTANCES_WRATHFULSMITE=new LinkedList<WrathfulSmiteSpell>()
 
-constant string WRATHFULSMITE_EFFECT="Abilities/Spells/Orc/SpiritLink/SpiritLinkTarget.mdl"
-constant string WRATHFULSMITE_EFFECT_ATTACH="weapon"
-constant real WRATHFULSMITE_BASE_DURATION=6.
-
 class WrathfulSmiteSpell
         unit caster
         real duration
@@ -29,7 +25,7 @@ class WrathfulSmiteSpell
                 SPELL_INSTANCES_WRATHFULSMITE.add(this)
                 //Create a timer that destorys the spell after its duration
                 TimerStart(this.t, this.duration, false, function endSpell)
-                this.e=this.caster.addEffect(WRATHFULSMITE_EFFECT, WRATHFULSMITE_EFFECT_ATTACH)
+                this.e=this.caster.addEffect(WRATHFULSMITE_EFFECT_CASTER, WRATHFULSMITE_EFFECT_ATTACH_CASTER)
                 //Adds a buff !DOES NOT WORK!
                 this.caster.addAbility(BUFF_ID_WRATHFULSMITE) 
 

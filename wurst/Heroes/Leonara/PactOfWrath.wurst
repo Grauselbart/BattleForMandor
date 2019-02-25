@@ -2,12 +2,6 @@ package PactOfWrath
 import Hero
 import ClosureTimers
 import Leonara_Data
-import Abilities
-
-constant real PACTOFWRATH_DURATION=5.
-constant int PACTOFWRATH_ID=LEONARA_SPELL_ID_P
-constant string PACTOFWRATH_FX=Abilities.roarCaster
-constant string PACTOFWRATH_FX_ATTACH="origin"
 
 public function getPactOfWrathStack(unit u)
     real duration=PACTOFWRATH_DURATION
