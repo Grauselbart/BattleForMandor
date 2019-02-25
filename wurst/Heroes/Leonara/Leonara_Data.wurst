@@ -29,6 +29,7 @@ constant let NAME="Paladin of Wrath"
 
 //Passive - Pact of Wrath stats
 public constant real PACTOFWRATH_DURATION=5.
+public constant real PACTOFWRATH_ATTACKSPEED=0.3
 public constant int PACTOFWRATH_ID=LEONARA_SPELL_ID_P
 public constant string PACTOFWRATH_FX=Abilities.roarCaster
 public constant string PACTOFWRATH_FX_ATTACH="origin"
@@ -65,6 +66,7 @@ public constant real WRATHFULSMITE_BASE_DURATION=6.
 		..setSpeedBase(MOVESPEED)
 		..hideHeroDeathMsg(true)
 		..setFoodCost(0)
+		..setHeroAbilities("")
 
 
 @compiletime function createAbilityLeoQ()
@@ -127,7 +129,7 @@ public constant real WRATHFULSMITE_BASE_DURATION=6.
 		..setLevels(1)
 		..presetChancetoCriticalStrike(lvl -> 0) 
 		..presetTooltipNormal(lvl -> "Pact of Wrath")
-		..presetTooltipNormalExtended(lvl -> "Gets stacks of wrath")
+		..presetTooltipNormalExtended(lvl -> "Whenever Leonara or an ally recieves damage, Leonara has a Chance to get one stack of 'Pact of Wrath' increasing her attackspeed by "+ (R2I(100*PACTOFWRATH_ATTACKSPEED)).toString() + "% for "+ PACTOFWRATH_DURATION.toString()+" seconds.|nThis effect stacks infinitly but each stack has its own duration.")
 		..presetCastRange(lvl -> 0)
 		..setHotkeyNormal("")
 		..presetButtonPosNormal(1, 1)
@@ -136,7 +138,7 @@ public constant real WRATHFULSMITE_BASE_DURATION=6.
 @compiletime function createAbilityLeoP()
 	new AbilityDefinitionAttackSpeedIncrease(LEONARA_SPELL_ID_P)
 		..setLevels(10)
-		..presetAttackSpeedIncrease(lvl -> 0.3 * lvl)
+		..presetAttackSpeedIncrease(lvl -> PACTOFWRATH_ATTACKSPEED * lvl)
 
 public let BUFF_ID_WRATHFULSMITE=compiletime(BUFF_ID_GEN.next())
 @compiletime function createBuff()
