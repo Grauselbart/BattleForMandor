@@ -33,6 +33,9 @@ public constant real PACTOFWRATH_ATTACKSPEED=0.3
 public constant int PACTOFWRATH_ID=LEONARA_SPELL_ID_P
 public constant string PACTOFWRATH_FX=Abilities.roarCaster
 public constant string PACTOFWRATH_FX_ATTACH="origin"
+public constant real PACTOFWRATH_RADIUS=800
+public constant int PACTOFWRATH_CHANCE_SELF=25
+public constant int PACTOFWRATH_CHANCE_OTHERS=5
 
 //Q - Wrathful Smite stats
 public constant string WRATHFULSMITE_EFFECT_CASTER=Abilities.fireBallMissile
@@ -129,7 +132,7 @@ public constant real WRATHFULSMITE_BASE_DURATION=6.
 		..setLevels(1)
 		..presetChancetoCriticalStrike(lvl -> 0) 
 		..presetTooltipNormal(lvl -> "Pact of Wrath")
-		..presetTooltipNormalExtended(lvl -> "Whenever Leonara or an ally recieves damage, Leonara has a Chance to get one stack of 'Pact of Wrath' increasing her attackspeed by "+ (R2I(100*PACTOFWRATH_ATTACKSPEED)).toString() + "% for "+ PACTOFWRATH_DURATION.toString()+" seconds.|nThis effect stacks infinitly but each stack has its own duration.")
+		..presetTooltipNormalExtended(lvl -> "Whenever Leonara or an ally recieves damage, Leonara has a Chance to get one stack of 'Pact of Wrath' increasing her attackspeed by "+ (R2I(100*PACTOFWRATH_ATTACKSPEED)).toString() + "% for "+ PACTOFWRATH_DURATION.toString()+" seconds.|nThis effect stacks infinitly but each stack has its own duration.|n|n"+PACTOFWRATH_CHANCE_SELF.toString()+"% chance when Leonara takes damage.|n"+PACTOFWRATH_CHANCE_OTHERS.toString()+"% chance when a near ally takes damage.")
 		..presetCastRange(lvl -> 0)
 		..setHotkeyNormal("")
 		..presetButtonPosNormal(1, 1)
