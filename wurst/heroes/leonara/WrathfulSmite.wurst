@@ -75,6 +75,7 @@ function endSpell()
                 if t==check.getTimer()
                         destroy check
                         break
+        i.close()
         
 //function for the DamageType2 Package, to get the damage amp if it als an instance of this spell
 public function checkWrathfulSmite(unit u) returns real
@@ -95,6 +96,7 @@ function unitInList(unit u) returns WrathfulSmiteSpell
                 if u==check.getCaster()
                         break
                 check=null
+        i.close()
         return check            
 
 // Check if the casting spell is Wrathful Smite

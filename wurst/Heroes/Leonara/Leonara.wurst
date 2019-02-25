@@ -2,6 +2,12 @@ package Leonara
 
 import Hero
 import Leonara_Data
+import LinkedList
+import PactOfWrath
+
+constant real PACTOFWRATH_RADIUS=800
+constant int PACTOFWRATH_CHANCE_SELF=25
+constant int PACTOFWRATH_CHANCE_OTHERS=5
 
 
 public class Leonara extends PlayerHero
@@ -26,3 +32,35 @@ public class Leonara extends PlayerHero
 		PLAYER_HEROES.add(this)
 
 
+//Returns all PlayerHeroes that a Leonaras LUL
+public function getPlayerHeroesOfTypeLeonara() returns LinkedList<PlayerHero>
+	LinkedList<PlayerHero> ph=PLAYER_HEROES.copy()
+	LLIterator<PlayerHero> i=ph.iterator()	
+	PlayerHero check
+	while i.hasNext()
+		check=i.next()
+		if not(check instanceof Leonara)
+			ph.remove(check)
+	i.close()
+	return ph
+
+//Checks the damaged unit of DamageType2 if the effect of pact of wrath is viable and if so, gains one stack of Pact of Wrath
+public function checkPactOfWrathChance(unit u)
+	LinkedList<PlayerHero> ph=getPlayerHeroesOfTypeLeonara()
+	LLIterator<PlayerHero> i=ph.iterator()
+	PlayerHero do
+	while i.hasNext()
+		do=i.next()
+		if u==do.getHero()
+			if GetRandomInt(0, 100)<=PACTOFWRATH_CHANCE_SELF
+				getPactOfWrathStack(do.getHero())
+				break
+		else if IsUnitInRange(u, do.getHero(), PACTOFWRATH_RADIUS) and GetRandomInt(0, 100)<=PACTOFWRATH_CHANCE_OTHERS
+			getPactOfWrathStack(do.getHero())
+			break
+	destroy ph
+	i.close()
+
+
+
+		

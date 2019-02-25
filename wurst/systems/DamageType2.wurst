@@ -7,6 +7,7 @@ import DamageDetection
 import CombatText
 import WrathfulSmite
 import Shield
+import Leonara
 
 class DelayDat
     unit target
@@ -99,6 +100,9 @@ function handler() returns bool
         BlzSetEventDamage(0.)
         dmgEnd = 0
     else
+        //Leonara Pact Of Wrath
+        checkPactOfWrathChance(uT)
+        //Shield engine
         checkShield(uT,dmgEnd)
         BlzSetEventDamage(dmgEnd)
     
