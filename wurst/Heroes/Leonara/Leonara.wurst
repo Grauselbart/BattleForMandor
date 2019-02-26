@@ -5,11 +5,6 @@ import Leonara_Data
 import LinkedList
 import PactOfWrath
 
-constant real PACTOFWRATH_RADIUS=800
-constant int PACTOFWRATH_CHANCE_SELF=25
-constant int PACTOFWRATH_CHANCE_OTHERS=5
-
-
 public class Leonara extends PlayerHero
 	construct(player owner, vec2 pos, angle facing)
 		super(owner, HERO_ID_LEONARA, pos, facing)
