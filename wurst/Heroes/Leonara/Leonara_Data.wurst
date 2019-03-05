@@ -5,6 +5,11 @@ import Icons
 import UnitIds
 import BuffObjEditing
 import Abilities
+import OrderStringFactory
+
+OrderStringFactory odf=new OrderStringFactory()
+@compiletime function initOdf()
+	odf=new OrderStringFactory()
 
 public let HERO_ID_LEONARA=compiletime(HERO_ID_GEN.next())
 public let LEONARA_SPELL_ID_P=compiletime(ABIL_ID_GEN.next())
@@ -44,6 +49,15 @@ public constant string WRATHFULSMITE_EFFECT_TARGET=Abilities.doomDeath
 public constant string WRATHFULSMITE_EFFECT_ATTACH_TARGET="origin"
 public constant real WRATHFULSMITE_BASE_DURATION=6.
 
+//W - Fios Distraction
+public constant string FIOSDISTRACTION_EFFECT=Abilities.faerieFireTarget
+public constant int FIOSDISTRACTION_ARMORSHRED=10
+public constant real FIOSDISTRACTION_MISSCHANCE=0.5
+public constant real FIOSDISTRACTION_DURATION=6.
+public constant real FIOSDISTRACTION_RANGE=800
+public constant real FIOSDISTRACTION_SPEED=1600
+public constant real FIOSDISTRACTION_HITBOX=100
+public constant string FIOSDISTRACTION_ORDER=compiletime(odf.getOrderString(true))
 
 @compiletime function createHero()
 	new HeroDefinition(HERO_ID_LEONARA, UnitIds.paladin)

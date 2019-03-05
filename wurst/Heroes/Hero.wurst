@@ -30,7 +30,7 @@ public abstract class PlayerHero
 	real 	HERO_STAT_CRITCHANCE=0.					// chance to crit
 	real 	HERO_STAT_CRITDAMAGE=1.5				// increased crit damage, standard is 150%
 	real 	HERO_STAT_TENACITY=0. 					// Status resistance
-	real 	HERO_STAT_CONCENTRATION=0.				// buff/debuff duration multiplier
+	real 	HERO_STAT_CONCENTRATION=1.				// buff/debuff duration multiplier
 	real 	HERO_STAT_COOLDOWNPERCENT=0. 			// global % CDR
 	real 	HERO_STAT_HEALINGPOWER=0. 				// increased healing
 	

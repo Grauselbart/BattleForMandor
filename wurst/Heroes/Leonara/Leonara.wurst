@@ -27,7 +27,7 @@ public class Leonara extends PlayerHero
 		PLAYER_HEROES.add(this)
 
 
-//Returns all PlayerHeroes that a Leonaras LUL
+//Returns all PlayerHeroes that are Leonaras
 public function getPlayerHeroesOfTypeLeonara() returns LinkedList<PlayerHero>
 	LinkedList<PlayerHero> ph=PLAYER_HEROES.copy()
 	LLIterator<PlayerHero> i=ph.iterator()	
@@ -50,7 +50,7 @@ public function checkPactOfWrathChance(unit u)
 			if GetRandomInt(0, 100)<=PACTOFWRATH_CHANCE_SELF
 				getPactOfWrathStack(do.getHero())
 				break
-		else if IsUnitInRange(u, do.getHero(), PACTOFWRATH_RADIUS) and GetRandomInt(0, 100)<=PACTOFWRATH_CHANCE_OTHERS
+		else if IsUnitInRange(u, do.getHero(), PACTOFWRATH_RADIUS) and IsUnitAlly(do.getHero(),GetOwningPlayer(u)) and GetRandomInt(0, 100)<=PACTOFWRATH_CHANCE_OTHERS
 			getPactOfWrathStack(do.getHero())
 			break
 	destroy ph

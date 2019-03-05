@@ -13,7 +13,7 @@ public function getPactOfWrathStack(unit u)
     effect e=u.addEffect(PACTOFWRATH_FX, PACTOFWRATH_FX_ATTACH)
     e.destr()
     if check!=null
-        duration*=(1+check.getStat(HeroStat.Concentration))
+        duration*=check.getStat(HeroStat.Concentration)
         
     //alter Ability
     int level=GetUnitAbilityLevel(u, PACTOFWRATH_ID)
