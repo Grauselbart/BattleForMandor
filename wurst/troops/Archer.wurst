@@ -7,7 +7,7 @@ import Assets
 import UnitObjEditing
 import ObjectIdGenerator
 
-public let archerId = compiletime(UNIT_ID_GEN.next())
+public let troopId_archer = compiletime(UNIT_ID_GEN.next())
 
 let PROJECTILE_ART = Abilities.arrowMissile1
 let PROJECTILE_SPEED = 900.
@@ -21,7 +21,7 @@ let PROJECTILE_HITBOX = 100.
 init
 	addOnDamageFunc(Condition(() -> begin
 		let uS = GetEventDamageSource()
-		if uS.getTypeId() == archerId and getDamageType() == DamageType.INGAME
+		if uS.getTypeId() == troopId_archer and getDamageType() == DamageType.INGAME
 			let uT = GetTriggerUnit()
 			let sPos = uS.getPos()
 			let startXY = sPos + ZERO2.polarOffset(uS.getFacingAngle() + PROJECTILE_LAUNCH_ROTATION, PROJECTILE_LAUNCH_OFFSET)
@@ -50,7 +50,7 @@ init
 
 //OBJECT DATA
 @compiletime function obj()
-	new UnitDefinition(archerId, 'nska')
+	new UnitDefinition(troopId_archer, 'nska')
 		//Base
 		..setName("Archer")
 		..setGoldBountyAwardedBase(0)

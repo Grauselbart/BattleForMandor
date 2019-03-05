@@ -1,5 +1,59 @@
 package Missile
 
+/*
+MISSILE SYSTEM
+
+To register a new missile, use 
+    misProjectile =	addEffect(PROJECTILE_ART, startXY)..setZ(startZ)
+
+then define the properties of the missile
+Movement Properties
+    misSource       - Owner of the missile to determine enemys or friends, and the damage source.
+    misTarget       - Target of the missile, if not null, the missile will become homing
+    misTargetPos    - If you dont have a target unit, the missile will travel to this position
+    misMaxRange     - Maximum range before missile is destroyed
+    misSpeed        - Speed of the missile in xy plane
+    misAccel        - Acceleration of missile in xy plane
+    misAngle        - Direction in wich the missile is traveeling
+    misSpin         - Rotation of missile in xy plane (cirular movement)
+    misArc          - Vertical arc of missile
+    misTurnRate     - Maximum turn rate for homing missiles !NOT IMPLEMENTED YET!
+    misMinZ         - Minimum z value the missile should reach at its turning point
+Hit & Damage properties
+    misHitBox           - Size of the missile hitbox
+    misHitDamage        - Damage dealt to targets the get hit by the missile
+    misHitEffect        - Effect on targets that got hit by the missile
+    misHitAttach        - Attachment point of misHitEffect
+    misDamageType       - Damage type of missile damage
+    misLineAfterHit     - If missile hits its target, it stops homing and flies in a line
+    misHitEnemy         - If true, the missile hits enemies
+    misHitAlly          - If true, the missile hits allies
+    misHitMagicImmune   - If true, the missile hits units that are immune to magic
+    misHitDestructable  - If true, the missile hits destructables
+End Conditions
+    misEndOnHit         - If true, the missile ends as soon as it hits a unit
+    misEndOnTarget      - If true, the missile ends as soon as it hits its target
+    misEndOnObstacle    - If true, the missile ends as soon as it hits terrain or any other obstacle
+Trigger
+    misEndTrigger       - This trigger is executed when the missile ends
+    misHitTrigger       - This trigger is executed whenever the missile hits a unit
+    misPeriodicTrigger  - This trigger is periodically executed
+    misPeriodicInt      - Defines how often the periodic trigger is executed
+
+After defining all necessary variables run
+    registerMissile()
+
+The misEndTrigger, misHitTrigger and misPeriodicTrigger can use the following variables
+    misTrigProjectile   - the projectile effect
+    misTrigSource
+    misTrigTarget
+    misTrigTargetPos
+    misTrigHitUnit      - Only for misHitTrigger
+    misTrigEndOnUnit    - Only for misHitTrigger
+    misTrigDamage
+    misTrigDamageType
+*/
+
 import Common
 import HashMap
 import LinkedListModule
@@ -335,6 +389,8 @@ public class Missile
                         misTrigSource       = missile.source
                         misTrigTarget       = missile.target
                         misTrigTargetPos    = missile.targetPos
+                        misTrigHitUnit      = u
+                        misTrigEndonUnit    = missile.endOnHit
                         misTrigDamage       = missile.hitDamage
                         misTrigDamageType   = missile.dmgType
                         TriggerExecute(missile.hitTrigger)
@@ -342,6 +398,8 @@ public class Missile
                         misTrigSource       = null
                         misTrigTarget       = null
                         misTrigTargetPos    = ZERO3
+                        misTrigHitUnit      = null
+                        misTrigEndonUnit    = false
                         misTrigDamage       = 0.
                         misTrigDamageType   = DamageType.ATTACK
                         if missile.endOnHit
