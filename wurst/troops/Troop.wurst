@@ -1,7 +1,11 @@
 package Troop
 
 import UnitObjEditing
+import DamageDetection
+import DamageType2
 import LinkedList
+import TimerUtils
+import ClosureForGroups
 
 public integer 	BASE_SPEED 		= 290
 public integer 	SIGHT_RADIUS	= 900
@@ -77,7 +81,7 @@ public enum TroopStat
 
 public LinkedList<Troop> TROOP_UNITS = new LinkedList<Troop>
 
-public abstract class Troop
+public class Troop
 	unit TROOP_UNIT
 	
 	// Abilities
@@ -94,6 +98,8 @@ public abstract class Troop
 
 	construct(player owner, int unitId, vec2 pos, angle facing)
 		TROOP_UNIT = createUnit(owner, unitId, pos, facing)
+		TROOP_UNITS.add(this)
+	
 	
 	// returns the troop unit
 	function getTroop() returns unit
@@ -119,3 +125,23 @@ public abstract class Troop
 				r = 0.
 				print("ERROR: Troop stat not found!")
 		return r
+
+group manaRegGroup = null
+timer manaRegLoop
+init
+	addOnDamageFunc(Condition(() -> begin
+		let uS = GetEventDamageSource()
+		LLIterator<Troop> i = TROOP_UNITS.iterator()
+		Troop t = null
+		while i.hasNext()
+			t = i.next()
+			if uS == t.TROOP_UNIT
+				manaRegGroup.addUnit(uS)
+				break
+		i.close()
+	
+	end))
+	manaRegLoop = getTimer()
+	manaRegLoop.startPeriodic(0.5) ->
+		manaRegGroup.forEachFrom() u ->
+			u.addMana(0.02)
