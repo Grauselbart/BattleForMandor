@@ -2,98 +2,99 @@ package FiosDistraction
 
 import Missile
 import Leonara_Data
-import DamageType2
-import SmartCast
 import Common
 import LinkedList
 import Hero
 import ClosureTimers
 
-trigger FioOnHit
+trigger fioOnHit
+trigger fioOnEnd
 
 
-LinkedList<Fio> Fios=new LinkedList<Fio>
+LinkedList<Fio> fios=new LinkedList<Fio>
 
 class Fio
     unit caster
-    unit target
+    unit target=null
+    effect ef=null
 
     construct(unit u)
         this.caster=u
+        fios.add(this)
+        print("new fio created")
         createFioMissile()
 
-
-
-    
     function createFioMissile()
         misProjectile =	addEffect(FIOSDISTRACTION_EFFECT, this.caster.getPos())..setZ(50)
-		misSource = this.caster
-		misTargetPos = this.caster.getOwner().getMousePos().toVec3()
-		misSpeed = FIOSDISTRACTION_SPEED
-		misAngle = this.caster.getPos().angleTo(misTargetPos.toVec2())
-		misArc = angle(0.)
-		misMaxRange = FIOSDISTRACTION_RANGE
-		misHitBox = FIOSDISTRACTION_HITBOX
+        misSource = this.caster
+        misTargetPos = this.caster.getOwner().getMousePos().toVec3()
+        misSpeed = FIOSDISTRACTION_SPEED
+        misAngle = this.caster.getPos().angleTo(misTargetPos.toVec2())
+        misArc = angle(0.)
+        misMaxRange = FIOSDISTRACTION_RANGE
+        misHitBox = FIOSDISTRACTION_HITBOX
         misHitDamage = 0
-        misHitTrigger = FioOnHit
-        misEndTrigger= FioOnHit
+        misHitTrigger = fioOnHit
+        misEndTrigger= fioOnEnd
         Missile.registerMissile()
 
     ondestroy
-        Fios.remove(this)
+        fios.remove(this)
 
  
 function onHit()
-    LLIterator<Fio> i=Fios.iterator()
+    LLIterator<Fio> i=fios.iterator()
     Fio f=null
     while i.hasNext()
         f=i.next()
         if f.caster == misTrigSource
-            // if nothing was hit, destroy the projectile and instance
-            if misTrigHitUnit==null
-                destroy f
-                break
-            // else apply effect of spell
-            else
-                f.target=misTrigHitUnit
-                real duration=FIOSDISTRACTION_DURATION
-                PlayerHero p=getPlayerHero(f.caster)
-                if p!=null
-                    duration*=p.getStat(HeroStat.Concentration)
-                f.target.setArmor(f.target.getArmor() - FIOSDISTRACTION_ARMORSHRED)
-                doAfter(duration) ->
-                    f.target.setArmor(f.target.getArmor() + FIOSDISTRACTION_ARMORSHRED)
-
-
-            
-
-
-    
-    
+            break            
     i.close()
+    print(misTrigHitUnit.getName())
+    f.target=misTrigHitUnit
+    real duration=FIOSDISTRACTION_DURATION
+    PlayerHero p=getPlayerHero(f.caster)
+    if p!=null
+        duration*=p.getStat(HeroStat.Concentration)
+    f.target.setArmor(f.target.getArmor() - FIOSDISTRACTION_ARMORSHRED)
+    f.ef=addEffect(FIOSDISTRACTION_EFFECT,f.target.getPos())
+    doPeriodically(FRQ)->
+        DoNothing()
+        
+    doAfter(duration) ->
+        f.target.setArmor(f.target.getArmor() + FIOSDISTRACTION_ARMORSHRED)
+        destroy f
 
-
-
+function onEnd()
+    LLIterator<Fio> i=fios.iterator()
+    Fio f=null
+    while i.hasNext()
+        f=i.next()
+        if f.caster == misTrigSource
+            break            
+    i.close()
+    if f.target==null
+        destroy f
 
 init 
-    FioOnHit=CreateTrigger()..addAction(function onHit)
-
+    fioOnHit=CreateTrigger()..addAction(function onHit)
+    fioOnEnd=CreateTrigger()..addAction(function onEnd)
 
 
 // Check if the casting spell is Wrathful Smite
 function thisSpell() returns boolean
-        return GetSpellAbilityId()==LEONARA_SPELL_ID_W
+    return GetSpellAbilityId()==LEONARA_SPELL_ID_W
 
 
 function initSpell()
     if thisSpell()
         let fio=new Fio(GetTriggerUnit())
-        Fios.add(fio)
+        
 
 
 
         
 //================TRIGGERCREATION===========================
-let WS=CreateTrigger()
+let FD=CreateTrigger()
         ..addAction(function initSpell)
         ..registerAnyUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST)

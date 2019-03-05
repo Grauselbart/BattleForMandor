@@ -55,7 +55,7 @@ public constant int FIOSDISTRACTION_ARMORSHRED=10
 public constant real FIOSDISTRACTION_MISSCHANCE=0.5
 public constant real FIOSDISTRACTION_DURATION=6.
 public constant real FIOSDISTRACTION_RANGE=800
-public constant real FIOSDISTRACTION_SPEED=1600
+public constant real FIOSDISTRACTION_SPEED=400
 public constant real FIOSDISTRACTION_HITBOX=100
 public constant string FIOSDISTRACTION_ORDER=compiletime(odf.getOrderString(true))
 

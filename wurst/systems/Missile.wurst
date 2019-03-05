@@ -64,7 +64,7 @@ import DamageDetection
 import DamageType2
 
 constant integer FPS = 30
-constant real FRQ = 1./FPS
+public constant real FRQ = 1./FPS
 
 // variables that carry over to missile event triggers
 public effect       misTrigProjectile = null

@@ -40,4 +40,4 @@ function createShield()
 	new Shield(PLAYER_HEROES.get(0).getHero(), 100, 100,Abilities.voodooAuraTarget,"overhead")
 
 function spawnArcher()
-	CreateUnit(pCreeps, archerId, 0, 0, angle(0).degrees())
+	CreateUnit(pCreeps, troopId_archer, 0, 0, angle(0).degrees())
