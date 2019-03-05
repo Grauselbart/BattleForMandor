@@ -6,6 +6,7 @@ import Missile
 import Assets
 import UnitObjEditing
 import ObjectIdGenerator
+import Troop
 
 public let troopId_archer = compiletime(UNIT_ID_GEN.next())
 
@@ -18,6 +19,7 @@ let PROJECTILE_LAUNCH_ROTATION = (0.).asAngleDegrees()
 let PROJECTILE_LAUNCH_OFFSET = 10.
 let PROJECTILE_HITBOX = 100.
 
+// construct super wie bei player hero
 init
 	addOnDamageFunc(Condition(() -> begin
 		let uS = GetEventDamageSource()
@@ -50,31 +52,16 @@ init
 
 //OBJECT DATA
 @compiletime function obj()
-	new UnitDefinition(troopId_archer, 'nska')
+	new TroopDefinition(troopId_archer)
 		//Base
 		..setName("Archer")
-		..setGoldBountyAwardedBase(0)
-		..setGoldBountyAwardedNumberofDice(0)
-		..setGoldBountyAwardedSidesperDie(0)
-		..setCanFlee(false)
 		..setModelFile(Units.archer)
-		//HP and Mana
-		..setHitPointsMaximumBase(500)
-		..setHitPointsRegenerationRate(5)
-		..setHitPointsRegenerationType("always")
-		..setManaMaximum(100)
-		..setManaInitialAmount(100)
-		..setManaRegeneration(1)
+		..setHitPointsMaximumBase(60)
 		//Attack
-		..setAttack1CooldownTime(3.)
-		..setAttack1AttackType(AttackType.Normal)
-		..setAcquisitionRange(600)
-		..setAttack1Range(600)
-		..setAttack1DamageBase(30)
-		..setAttack1DamageNumberofDice(1)
-		..setAttack1DamageSidesperDie(50)
+		..setAcquisitionRange(800)
+		..setAttack1Range(800)
+		..setAttack1DamageBase(12)
+		..setAttack1DamageNumberofDice(2)
+		..setAttack1DamageSidesperDie(12)
 		..setAttack1ProjectileArt("none")
 		..setAttack1WeaponType(WeaponType.Instant)
-		//Armor
-		..setArmorType(ArmorType.Normal)
-		..setDefenseBase(0)
